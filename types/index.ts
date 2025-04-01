@@ -1,0 +1,1 @@
+export type FormTabsType = 'preview' | 'settings' | 'statistics'

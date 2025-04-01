@@ -4,9 +4,7 @@
   --foreground: black;
 }
 
-[data-theme='dark'] {
   
-}
 body {
 }
 
@@ -16,3 +14,13 @@ body {
   margin: 0;
 }
 
+a{
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.grid-container{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 колонок */
+  gap: 16px; 
+}
