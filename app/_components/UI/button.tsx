@@ -1,6 +1,6 @@
 interface ButtonProps{
   label: string;
-  style: 'primary'| 'outline-primary';
+  style: 'primary'| 'outline-primary' | 'red';
   size?: 'small' | 'large'
 }
 const Button = ({label, style, size = 'small'}: ButtonProps) => {
@@ -9,6 +9,7 @@ const Button = ({label, style, size = 'small'}: ButtonProps) => {
       className={`
         ${style == 'outline-primary' && 'btn-outline-primary'}
         ${style == 'primary' && 'btn-primary'}
+        ${style == 'red' && 'btn-outline-danger'}
         ${size == 'large' && 'btn-lg'}
         btn
       `}
