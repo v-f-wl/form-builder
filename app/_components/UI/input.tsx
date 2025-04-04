@@ -2,7 +2,7 @@ interface InputProps{
   label: string
   disabled?: boolean;
 }
-// add id
+// todo:add id
 const Input = ({label, disabled }: InputProps) => {
   return ( 
     <div className="form-floating mb-3">

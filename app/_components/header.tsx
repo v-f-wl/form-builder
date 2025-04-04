@@ -1,5 +1,8 @@
+'use client'
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, UserProfile } from "@clerk/nextjs";
 import Logo from "./UI/logo";
 import SearchInput from "./UI/search-input";
+import ILogo from "./icons/logo-icon";
 
 const Haeader = () => {
   return ( 
@@ -12,8 +15,21 @@ const Haeader = () => {
           <SearchInput/>
         </div>
         <div className="col d-flex gap-3 justify-content-end">
-          <div className="btn btn-outline-primary">LogIn</div>
-          <div className="btn btn-primary">SignUp</div>
+          <SignedOut>
+            <SignInButton/>
+            <SignUpButton />
+          </SignedOut>
+          <SignedIn>
+          <UserButton>
+            <UserButton.MenuItems>
+              <UserButton.Link
+                label="Create form"
+                labelIcon={<ILogo />}
+                href="/create-form"
+              />
+            </UserButton.MenuItems>
+          </UserButton>
+          </SignedIn>
         </div>
       </div>
     </div>
