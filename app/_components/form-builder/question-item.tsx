@@ -3,7 +3,7 @@ import Button from "@/app/_components/UI/button";
 import Input from "@/app/_components/UI/input";
 import Subtitle from "@/app/_components/UI/subtitle";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CheckboxAnswer, InputPlaceholder } from "../type-of-answer";
+import { CheckboxAnswer, InputPlaceholder } from "./type-of-answer";
 import Select from "../UI/select";
 import { QuestionType } from "@/types";
 import { useFormBuilder } from "../../context/form-builder-context";

@@ -37,7 +37,7 @@ export const QuestionsList = () => {
   return (
     <div className="flex flex-col gap-4">
       {questionsForm.length === 0 ? (
-        <div className="text-gray-500">Add first question</div>
+        <div className="text-center  fs-5 my-3 fw-semibold text-secondary">Add first question</div>
       ) : (
         <DndContext
           sensors={sensors}

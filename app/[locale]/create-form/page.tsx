@@ -4,6 +4,7 @@ import FormBuilder from "../../_components/form-builder/form-builder";
 import { AddQuestionButton } from "@/app/_components/form-builder/add-question-button";
 import { QuestionsList } from "@/app/_components/form-builder/questions-list";
 import { Descriptions } from "@/app/_components/form-builder/form-description";
+import SubmitFormBtn from "@/app/_components/form-builder/submit-form-btn";
 
 const CreatePage = () => {
   return (  
@@ -17,6 +18,7 @@ const CreatePage = () => {
           <Descriptions />
           <QuestionsList />
           <AddQuestionButton />
+          <SubmitFormBtn/>
         </FormBuilder>
       </div>
     </div>

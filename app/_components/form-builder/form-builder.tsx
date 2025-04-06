@@ -2,6 +2,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { QuestionFormType } from "@/types";
 import { FormBuilderContext } from "../../context/form-builder-context";
+import { nanoid } from "@reduxjs/toolkit";
 
 
 const FormBuilder = ({children, formId}: {children: ReactNode, formId: string | undefined}) => {
@@ -16,16 +17,15 @@ const FormBuilder = ({children, formId}: {children: ReactNode, formId: string | 
     } else {
       setQuestionsForm([
         {
-          id: crypto.randomUUID(),
+          id: nanoid(),
           title: "",
           typeOfAnswer: "short_text",
-          answersList: [{ id: crypto.randomUUID(), value: "" }, { id: crypto.randomUUID(), value: "" }],
+          answersList: [{ id: nanoid(), value: "" }, { id: nanoid(), value: "" }],
           required: false,
         },
       ]);
     }
   }, [formId])
-  // useEffect(() => {console.group(questionsForm)}, [questionsForm])
   // useEffect(() => {console.log(JSON.stringify(questionsForm, null, 2))}, [questionsForm])
 
   const updateQuestion = (id: string, updatedData: Partial<QuestionFormType>) => {
@@ -44,7 +44,7 @@ const FormBuilder = ({children, formId}: {children: ReactNode, formId: string | 
               ...q,
               answersList: [
                 ...q.answersList,
-                { id: crypto.randomUUID(), value: "" },
+                { id: nanoid(), value: "" },
               ],
             }
           : q

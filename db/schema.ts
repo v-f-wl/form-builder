@@ -1,18 +1,11 @@
+
 import { boolean, integer, pgEnum, pgTable, primaryKey, text, timestamp, varchar } from "drizzle-orm/pg-core"
-
-
-export const questionTypeEnum = pgEnum("question_type", [
-  "short_text",
-  "paragraph",
-  "select_one",
-  "number",
-])
 
 export const usersTable = pgTable("users", {
   id: integer('user_id').primaryKey().generatedAlwaysAsIdentity(),
   name: text('user_name').notNull(),
   isBlocked: boolean("is_blocked").default(false),
-  clerkId: varchar({length: 255}),
+  clerkId: varchar({length: 255}).unique(),
   email: varchar('user_email', { length: 255 }).notNull().unique(),
   createdAt: timestamp("created_at").defaultNow(),
 })
@@ -21,24 +14,28 @@ export const formsTable = pgTable("forms", {
   id: integer("form_id").primaryKey().generatedAlwaysAsIdentity(),
   title: text().notNull(), 
   description: text().notNull(),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => usersTable.id, { onDelete: "cascade" }),
+  userId: varchar('clerk_id', { length: 255 })
+  .notNull()
+  .references(() => usersTable.clerkId,  { onDelete: "cascade" }),
   views: integer("views").default(0),
   createdAt: timestamp("created_at").defaultNow(),
 })
 
-export const formPermissionsTable = pgTable("formPermissions", {
+export const formPermissionsTable = pgTable("form_permissions", {
   formId: integer('form_id').notNull().references(() => formsTable.id, {onDelete:'cascade'}),
-  userId: integer('user_id').notNull().references(() => usersTable.id,  {onDelete:'cascade'}),
+  userId: varchar('clerk_id', { length: 255 })
+  .notNull()
+  .references(() => usersTable.clerkId,  {onDelete:'cascade'}),
 }, (table) =>  [
   primaryKey({ columns: [table.formId, table.userId] })
 ]);
 
-export const formCommentsTable = pgTable("formComments", {
+export const formCommentsTable = pgTable("form_comments", {
   formCommentId: integer().primaryKey().generatedAlwaysAsIdentity(),
   formId: integer('form_id').notNull().references(() => formsTable.id, {onDelete:'cascade'}),
-  userId: integer('user_id').notNull().references(() => usersTable.id,  {onDelete:'cascade'}),
+  userId: varchar('clerk_id', { length: 255 })
+  .notNull()
+  .references(() => usersTable.clerkId,   {onDelete:'cascade'}),
   createdAt: timestamp("created_at").defaultNow(),
 })
 
@@ -63,7 +60,8 @@ export const questionsTable = pgTable("questions", {
     .references(() => formsTable.id, { onDelete: "cascade" }),
   title: varchar("title", { length: 500 }).notNull(),
   isRequired: boolean("is_required").default(false),
-  type: questionTypeEnum("type").notNull(),
+  type: text("type").notNull(),
+  image: text('user_image').default(''),
 })
 
 export const questionOptionsTable = pgTable("question_options", {
@@ -77,8 +75,9 @@ export const answersTable = pgTable("answers", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   questionId: integer("question_id").notNull()
     .references(() => questionsTable.id, { onDelete: "cascade" }),
-  userId: integer("user_id").notNull()
-    .references(() => usersTable.id, { onDelete: "cascade" }),
+  userId: varchar('clerk_id', { length: 255 })
+    .notNull()
+    .references(() => usersTable.clerkId,  { onDelete: "cascade" }),
   answerText: text("answer_text").notNull(),
   submittedAt: timestamp("submitted_at").defaultNow(),
 })
@@ -86,6 +85,6 @@ export const answersTable = pgTable("answers", {
 export const formSubmissionsTable = pgTable("form_submissions", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   formId: integer("form_id").notNull().references(() => formsTable.id, { onDelete: "cascade" }),
-  userId: integer("user_id").references(() => usersTable.id),
+  userId: varchar("clerk_id", {length: 255}).notNull().references(() => usersTable.clerkId),
   submittedAt: timestamp("submitted_at").defaultNow(),
 })
