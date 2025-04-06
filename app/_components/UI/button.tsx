@@ -1,11 +1,13 @@
 interface ButtonProps{
   label: string;
   style: 'primary'| 'outline-primary' | 'red';
-  size?: 'small' | 'large'
+  size?: 'small' | 'large';
+  onClick: () => void;
 }
-const Button = ({label, style, size = 'small'}: ButtonProps) => {
+const Button = ({label, style, size = 'small', onClick}: ButtonProps) => {
   return (  
     <button 
+      onClick={onClick}
       className={`
         ${style == 'outline-primary' && 'btn-outline-primary'}
         ${style == 'primary' && 'btn-primary'}

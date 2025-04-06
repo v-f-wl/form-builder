@@ -3,6 +3,7 @@ import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, UserProfil
 import Logo from "./UI/logo";
 import SearchInput from "./UI/search-input";
 import ILogo from "./icons/logo-icon";
+import ICreate from "./icons/create-icon";
 
 const Haeader = () => {
   return ( 
@@ -24,7 +25,7 @@ const Haeader = () => {
             <UserButton.MenuItems>
               <UserButton.Link
                 label="Create form"
-                labelIcon={<ILogo />}
+                labelIcon={<ICreate />}
                 href="/create-form"
               />
             </UserButton.MenuItems>

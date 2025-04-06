@@ -24,3 +24,9 @@ a{
   grid-template-columns: repeat(5, 1fr); /* 5 колонок */
   gap: 16px; 
 }
+.cursor-default{
+  cursor: default;
+}
+.cursor-pointer{
+  cursor: pointer;
+}

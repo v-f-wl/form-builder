@@ -1,8 +1,8 @@
-import FormHeaderEditor from "@/app/_components/form-header-editor";
-import FormQuestionsEditor from "@/app/_components/form-questions-editor";
-import Button from "@/app/_components/UI/button";
-import Input from "@/app/_components/UI/input";
-import Textarea from "@/app/_components/UI/textarea";
+
+import { AddQuestionButton } from "@/app/_components/form-builder/add-question-button";
+import FormBuilder from "@/app/_components/form-builder/form-builder";
+import { Descriptions } from "@/app/_components/form-builder/form-description";
+import { QuestionsList } from "@/app/_components/form-builder/questions-list";
 import Title from "@/app/_components/UI/title";
 
 const FormSettings = () => {
@@ -19,8 +19,11 @@ const FormSettings = () => {
         </div>
         </div>
         <div className="col">
-        <FormHeaderEditor/>
-        <FormQuestionsEditor/>
+          <FormBuilder formId={undefined}>
+            <Descriptions />
+            <QuestionsList />
+            <AddQuestionButton />
+          </FormBuilder>
         </div>
       </div>
     </div>
