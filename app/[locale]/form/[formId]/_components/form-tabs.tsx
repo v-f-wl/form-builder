@@ -1,15 +1,18 @@
 'use client'
 
 import { FormTabsType } from "@/types";
-import { useState } from "react";
-
-const FormTabs = () => {
-  const [activeTab, setActiveTab] = useState<FormTabsType>('preview')
+const FormTabs = ({
+  changeTab,
+  activeTab
+}:{
+  changeTab:(value: FormTabsType) => void
+  activeTab: FormTabsType
+}) => {
   return (  
     <ul className="nav nav-tabs">
       <li className="nav-item">
         <button 
-          onClick={() =>setActiveTab('preview')}
+          onClick={() =>changeTab('preview')}
           className={`
             ${activeTab === 'preview' ? 'text-primary active' : 'text-body-secondary'}
             nav-link 
@@ -20,7 +23,7 @@ const FormTabs = () => {
       </li>
       <li className="nav-item">
         <button 
-          onClick={() =>setActiveTab('settings')}
+          onClick={() =>changeTab('settings')}
           className={`
             ${activeTab === 'settings' ? 'text-primary active' : 'text-body-secondary'}
             nav-link 
@@ -31,7 +34,7 @@ const FormTabs = () => {
       </li>
       <li className="nav-item">
         <button 
-          onClick={() =>setActiveTab('statistics')}
+          onClick={() =>changeTab('statistics')}
           className={`
             ${activeTab === 'statistics' ? 'text-primary active' : 'text-body-secondary'}
             nav-link 
