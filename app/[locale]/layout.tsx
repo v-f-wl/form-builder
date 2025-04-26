@@ -9,11 +9,6 @@ import { LocaleProvider } from '../context/locale-context';
 import Haeader from '../_components/header';
 import {
   ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
 } from '@clerk/nextjs'
 import { BootstrapThemeSync } from '@/hooks/theme/BootstrapThemeSync';
 import { Toaster } from 'react-hot-toast';
