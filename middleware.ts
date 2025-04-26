@@ -7,7 +7,7 @@ const intlMiddleware = createMiddleware({
   defaultLocale: 'en',
 })
 
-const isProtectedRoute = createRouteMatcher(['dashboard/(.*)'])
+const isProtectedRoute = createRouteMatcher(['/:locale/profile'])
 
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) await auth.protect()
