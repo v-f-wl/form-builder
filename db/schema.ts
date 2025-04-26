@@ -1,12 +1,12 @@
-
-import { boolean, integer, pgEnum, pgTable, primaryKey, text, timestamp, varchar } from "drizzle-orm/pg-core"
+import { boolean, integer, pgTable, primaryKey, text, timestamp, varchar } from "drizzle-orm/pg-core"
 
 export const usersTable = pgTable("users", {
-  id: integer('user_id').primaryKey().generatedAlwaysAsIdentity(),
-  name: text('user_name').notNull(),
+  id: integer('user_id').primaryKey().generatedAlwaysAsIdentity().unique(),
+  name: text('user_name').default(''),
   isBlocked: boolean("is_blocked").default(false),
   clerkId: varchar({length: 255}).unique(),
   email: varchar('user_email', { length: 255 }).notNull().unique(),
+  permission: varchar('user_permission', {length: 50}).notNull().default('user'),
   createdAt: timestamp("created_at").defaultNow(),
 })
 
@@ -18,6 +18,8 @@ export const formsTable = pgTable("forms", {
   .notNull()
   .references(() => usersTable.clerkId,  { onDelete: "cascade" }),
   views: integer("views").default(0),
+  images: text("images").default(""),
+  category: varchar('category', { length: 255 }).default(""),
   createdAt: timestamp("created_at").defaultNow(),
 })
 
@@ -39,20 +41,6 @@ export const formCommentsTable = pgTable("form_comments", {
   createdAt: timestamp("created_at").defaultNow(),
 })
 
-export const tagsTable = pgTable("tags", {
-  id: integer("tag_id").primaryKey().generatedAlwaysAsIdentity(),
-  label: varchar("label", { length: 255 }).notNull(), //todo: validation on client
-})
-
-export const formTagsTable = pgTable("form_tags", {
-  formId: integer("form_id").notNull()
-    .references(() => formsTable.id, { onDelete: "cascade" }),
-  tagId: integer("tag_id").notNull()
-    .references(() => tagsTable.id, { onDelete: "cascade" }),
-}, (table) => [
-  primaryKey({ columns: [table.formId, table.tagId] })
-])
-
 
 export const questionsTable = pgTable("questions", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
@@ -73,6 +61,12 @@ export const questionOptionsTable = pgTable("question_options", {
 
 export const answersTable = pgTable("answers", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  submissionId: integer("submission_id")
+    .notNull()
+    .references(() => formSubmissionsTable.id, { onDelete: "cascade" }), 
+  formId: integer("form_id")
+    .notNull()
+    .references(() => formsTable.id, { onDelete: "cascade" }),
   questionId: integer("question_id").notNull()
     .references(() => questionsTable.id, { onDelete: "cascade" }),
   userId: varchar('clerk_id', { length: 255 })
@@ -88,3 +82,15 @@ export const formSubmissionsTable = pgTable("form_submissions", {
   userId: varchar("clerk_id", {length: 255}).notNull().references(() => usersTable.clerkId),
   submittedAt: timestamp("submitted_at").defaultNow(),
 })
+
+export const hashtags = pgTable('hashtags', {
+  id: integer('id').primaryKey(),
+  name: varchar('name', {length: 255}).unique(),
+  count: integer('count').default(1),
+});
+
+export const formHashtags = pgTable('post_hashtags', {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  postId: integer('post_id').references(() => formsTable.id),
+  hashtagId: integer('hashtag_id').references(() => hashtags.id),
+});

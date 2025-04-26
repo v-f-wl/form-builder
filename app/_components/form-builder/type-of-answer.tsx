@@ -4,6 +4,7 @@ import Input from "../UI/input";
 import { useFormBuilder } from "../../context/form-builder-context";
 import IClose from "../icons/close-icon";
 import IAddLinear from "../icons/add-linear-icon";
+import { useTranslations } from "next-intl";
 
 export const InputPlaceholder = ({label}: {label: string}) => {
   return ( 
@@ -19,6 +20,7 @@ export const CheckboxAnswer = ({
   id: string, 
 }) => {
   const { questionsForm, updateAnswer, addAnswer, deleteAnswer } = useFormBuilder()
+  const t = useTranslations()
   const currentAnswers = questionsForm.find(q => q.id === id)?.answersList || []
 
   const isMinAnswersReached = currentAnswers.length <= 2;
@@ -49,7 +51,7 @@ export const CheckboxAnswer = ({
           onClick={() => addAnswer(id)} 
           className={`d-flex align-items-center justify-content-center gap-2 btn btn-outline-primary btn-sm`}
         >
-          <div className="">One more Line</div>
+          <div className="">{t('formBuilder.oneMore')}</div>
           <IAddLinear/>
         </button>
       )}

@@ -12,17 +12,18 @@ type IncomingQuestion = {
 
 
 export async function POST(req: Request) {
+  // todo: добавить try catch
   const body = await req.json()
-  const { title, description, questions, userId } = body as {
+  const { title, description, questions, userId, formCategory } = body as {
     title: string;
     description: string;
     questions: IncomingQuestion[];
     userId: string;
+    formCategory: string;
   };
-
   const [form] = await db
     .insert(formsTable)
-    .values({ title, description, userId })
+    .values({ title, description, userId, category: formCategory })
     .returning({ id: formsTable.id });
 
   const formId = form.id;
@@ -48,7 +49,6 @@ export async function POST(req: Request) {
       await db.insert(questionOptionsTable).values(optionsToInsert);
     }
   }
-
   return new Response(JSON.stringify({ message: "Form created", formId }), {
     status: 201,
   });

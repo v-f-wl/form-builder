@@ -18,6 +18,15 @@ interface FormBuilderContextType {
   updateAnswer:(questionId: string, answerId: string, newValue: string) =>  void;
   deleteAnswer: (questionId: string, answerId: string) => void;
   addAnswer: (questionId: string) => void;
+  formImage: File | null;
+  setFormImage: Dispatch<SetStateAction<File | null>>;
+  isSubmitting: boolean;
+  setIsSubmitting: Dispatch<SetStateAction<boolean>>;
+  formCategory: string; 
+  setFormCategory: Dispatch<SetStateAction<string>>;
+  validationErrors: Record<string, string>;
+  setValidationErrors: Dispatch<SetStateAction<Record<string, string>>>;
+  validateQuestions: () => QuestionFormType[];
 }
 
 export const FormBuilderContext = createContext<FormBuilderContextType | undefined>(undefined);

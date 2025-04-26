@@ -16,7 +16,7 @@ import { useFormBuilder } from "../../context/form-builder-context";
 import SortableQuestionItem from './dnd-wrapper';
 
 export const QuestionsList = () => {
-  const { questionsForm, setQuestionsForm } = useFormBuilder()
+  const { questionsForm, setQuestionsForm, isSubmitting } = useFormBuilder()
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -26,6 +26,8 @@ export const QuestionsList = () => {
     })
   )
   const handleDragEnd = (event: any) => {
+    if(isSubmitting) return
+    
     const { active, over } = event
     if (active.id !== over?.id) {
       const oldIndex = questionsForm.findIndex((q) => q.id === active.id)
@@ -35,7 +37,7 @@ export const QuestionsList = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 mt-4">
       {questionsForm.length === 0 ? (
         <div className="text-center  fs-5 my-3 fw-semibold text-secondary">Add first question</div>
       ) : (
@@ -49,7 +51,7 @@ export const QuestionsList = () => {
             strategy={verticalListSortingStrategy}
           >
             <div className="flex flex-col gap-4">
-              {questionsForm.map((question, index) => (
+              {questionsForm.sort((a, b) => Number(a.id) - Number(b.id)).map((question, index) => (
                 <SortableQuestionItem
                   key={question.id}
                   id={question.id}

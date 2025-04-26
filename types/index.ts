@@ -13,12 +13,21 @@ export interface AnswersListType{
   id: string;
   value: string;
 }
+
+export type Answer = { id: string; value: string };
+
 export interface QuestionFormType{
   id: string;
   title: string;
   typeOfAnswer: QuestionType;
-  answersList: Array<{id: string; value: string}>;
+  answersList: Array<Answer>
   required: boolean;
+}
+export interface AnswerSubmission{
+  questionId: string,
+  answer: string,
+  required: boolean,
+  type: string,
 }
 
 export interface InputProps{
@@ -28,4 +37,25 @@ export interface InputProps{
   value?: string;
   id:string; 
   onChange?: (name: string, value: string) => void;
+  error?: string | undefined
+}
+export interface ResponseFormData {
+  id: string;
+  title: string;
+  description: string;
+  userId: string;
+  userName: string;
+  createdAt: Date;
+  category: string
+  user?: {
+    name: string
+  }
+}
+
+export type FormCardProps  = {
+  title: string;
+  description: string;
+  author: string;
+  previewUrl: string;
+  id: string;
 }

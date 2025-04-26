@@ -58,9 +58,9 @@ export async function POST(req: Request) {
         clerkId,
       })
     } catch (err) {
-      return new Response('DB error', { status: 500 }) // todo: обрадатывать ошибку
+      console.log(err)
+      return new Response('DB error', { status: 500 })
     }
   }
-
   return new Response('Webhook received', { status: 200 })
 }

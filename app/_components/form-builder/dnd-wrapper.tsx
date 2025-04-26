@@ -31,7 +31,7 @@ const SortableQuestionItem = ({
   return (
     <div ref={setNodeRef} style={style} {...attributes} className='position-relative cursor-default'>
       <div
-          className="p-2 text-xl select-none position-absolute top-0 start-50 translate-middle cursor-pointer"
+          className="p-2 text-xl select-none position-absolute top-2 start-50 translate-middle cursor-pointer z-3"
           {...listeners}
         >
           <IDrag/>

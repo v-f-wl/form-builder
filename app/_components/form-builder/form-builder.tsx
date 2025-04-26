@@ -1,93 +1,109 @@
 'use client'
-import { ReactNode, useEffect, useState } from "react";
-import { QuestionFormType } from "@/types";
 import { FormBuilderContext } from "../../context/form-builder-context";
-import { nanoid } from "@reduxjs/toolkit";
+import { useFormData } from "@/hooks/form/useFormData";
+import { useQuestionLogic } from "@/hooks/form/useQuestionLogic";
+import Loading from "../loading";
+import { ReactNode, useState } from "react";
+import { QuestionFormType } from "@/types";
 
+const FormBuilder = ({ children, formId }: { children: ReactNode, formId: string | undefined }) => {
+  const {
+    descriptionsForm,
+    setDesctiprionForm,
+    questionsForm,
+    setQuestionsForm,
+    formImage,
+    setFormImage,
+    isLoaded,
+    isSubmitting, 
+    setIsSubmitting,
+    formCategory, 
+    setFormCategory
+  } = useFormData(formId);
 
-const FormBuilder = ({children, formId}: {children: ReactNode, formId: string | undefined}) => {
-  const [descriptionsForm, setDesctiprionForm] = useState({ title: "", description: "" });
-  const [questionsForm, setQuestionsForm] = useState<QuestionFormType[]>([]);
+  const {
+    updateAnswer,
+    deleteAnswer,
+    addAnswer,
+    updateQuestion,
+    deleteQuestion,
+  } = useQuestionLogic(questionsForm, setQuestionsForm);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
 
   const isEditMode = Boolean(formId);
+  if (!isLoaded) return <Loading />;
 
-  useEffect(() => {
-    if (isEditMode) {
-      // todo: Загружаем данные формы по ID
-    } else {
-      setQuestionsForm([
-        {
-          id: nanoid(),
-          title: "",
-          typeOfAnswer: "short_text",
-          answersList: [{ id: nanoid(), value: "" }, { id: nanoid(), value: "" }],
-          required: false,
-        },
-      ]);
+  const validateQuestions = (): QuestionFormType[] => {
+    const validQuestions: QuestionFormType[] = []
+    const currentErrors: Record<string, string> = {}
+
+    if (!descriptionsForm.title.trim()) {
+      currentErrors["_title"] = "Название формы обязательно";
     }
-  }, [formId])
-  // useEffect(() => {console.log(JSON.stringify(questionsForm, null, 2))}, [questionsForm])
+  
+    if (!descriptionsForm.description.trim()) {
+      currentErrors["_description"] = "Описание формы обязательно";
+    }
+    
+    const hasRequired = questionsForm.some((q) => q.required)
+    if (!hasRequired) {
+      currentErrors["_form"] = "В форме должен быть хотя бы один обязательный вопрос"
+    }
 
-  const updateQuestion = (id: string, updatedData: Partial<QuestionFormType>) => {
-    setQuestionsForm((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, ...updatedData } : q))
-    )
+    questionsForm.forEach((q) => {
+      const title = q.title?.trim()
+      const filteredAnswers = q.answersList?.filter((a) => a.value.trim() !== "") || []
+
+      if (!title) {
+        if (q.required) {
+          currentErrors[q.id] = "У обязательного вопроса должен быть заголовок";
+        }
+        return
+      }
+
+      if (q.typeOfAnswer === "select_one" && filteredAnswers.length < 2) {
+        currentErrors[q.id] = "Минимум 2 варианта ответа"
+        return
+      }
+
+      validQuestions.push({
+        ...q,
+        title: title || "",
+        answersList: filteredAnswers,
+      })
+    })
+    console.log(currentErrors)
+    setValidationErrors(currentErrors)
+    return validQuestions
   }
-  const deleteQuestion = (id: string) => {
-    setQuestionsForm((prev) => prev.filter((q) => q.id !== id));
-  }
-  const addAnswer = (questionId: string) => {
-    setQuestionsForm((prev) =>
-      prev.map((q) =>
-        q.id === questionId
-          ? {
-              ...q,
-              answersList: [
-                ...q.answersList,
-                { id: nanoid(), value: "" },
-              ],
-            }
-          : q
-      )
-    );
-  };
-  
-  const updateAnswer = (questionId: string, answerId: string, newValue: string) => {
-    setQuestionsForm((prev) =>
-      prev.map((q) =>
-        q.id === questionId
-          ? {
-              ...q,
-              answersList: q.answersList.map((a) =>
-                a.id === answerId ? { ...a, value: newValue } : a
-              ),
-            }
-          : q
-      )
-    );
-  };
-  
-  const deleteAnswer = (questionId: string, answerId: string) => {
-    setQuestionsForm((prev) =>
-      prev.map((q) =>
-        q.id === questionId
-          ? {
-              ...q,
-              answersList: q.answersList.filter((a) => a.id !== answerId),
-            }
-          : q
-      )
-    );
-  };
-  
-  
+
   return (
     <FormBuilderContext.Provider
-      value={{ updateAnswer, deleteAnswer, addAnswer, updateQuestion, deleteQuestion, descriptionsForm, setDesctiprionForm, questionsForm, setQuestionsForm, isEditMode }}
+      value={{
+        formImage,
+        setFormImage,
+        updateAnswer,
+        deleteAnswer,
+        addAnswer,
+        updateQuestion,
+        deleteQuestion,
+        descriptionsForm,
+        setDesctiprionForm,
+        questionsForm,
+        setQuestionsForm,
+        isEditMode,
+        isSubmitting, 
+        setIsSubmitting,
+        formCategory, 
+        setFormCategory,
+        validationErrors,
+        setValidationErrors,
+        validateQuestions,
+      }}
     >
       <div className="my-4 w-full">{children}</div>
     </FormBuilderContext.Provider>
-  )
-}
- 
+  );
+};
+
 export default FormBuilder;

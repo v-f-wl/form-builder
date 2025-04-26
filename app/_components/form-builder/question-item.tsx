@@ -7,6 +7,8 @@ import { CheckboxAnswer, InputPlaceholder } from "./type-of-answer";
 import Select from "../UI/select";
 import { QuestionType } from "@/types";
 import { useFormBuilder } from "../../context/form-builder-context";
+import { TYPE_OF_ANSWER_OPTIONS } from "@/lib/constants";
+import { useTranslations } from "next-intl";
 
 interface QuestionItemProps{
   order: number;
@@ -16,17 +18,6 @@ interface QuestionItemProps{
   required: boolean,
 }
 
-const selectOptions = [
-  {
-    value: 'short_text', label: 'Short answer' 
-  },
-  {
-    value: 'paragraph', label: 'Paragraph' 
-  },
-  {
-    value: 'select_one', label: 'Select one' 
-  },
-]
 
 const QuestionItem = ({
   order,
@@ -36,37 +27,15 @@ const QuestionItem = ({
   required,
 }:QuestionItemProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const [isActive, setIsActive] = useState(false)
-  const { updateQuestion, deleteQuestion } = useFormBuilder()
-  // border style
-  useEffect(() => {
-    const handleFocusIn = () => setIsActive(true);
-    const handleFocusOut = (event: FocusEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.relatedTarget as Node)) {
-        setIsActive(false);
-      }
-    };
-
-    const element = wrapperRef.current;
-    if (element) {
-      element.addEventListener("focusin", handleFocusIn);
-      element.addEventListener("focusout", handleFocusOut);
-    }
-
-    return () => {
-      if (element) {
-        element.removeEventListener("focusin", handleFocusIn);
-        element.removeEventListener("focusout", handleFocusOut);
-      }
-    };
-  }, [])
+  const { updateQuestion, deleteQuestion, isSubmitting, validationErrors } = useFormBuilder()
+  const t = useTranslations()
 
   const TypeOfAnswerRander = useMemo(() => {
     switch (typeOfAnswer) {
       case "short_text":
-        return <InputPlaceholder label={'Short answer text'}/>
+        return <InputPlaceholder label={t('formBuilder.shortAnswer')}/>
       case "paragraph":
-        return <InputPlaceholder label={'Long answer text'}/>
+        return <InputPlaceholder label={t('formBuilder.paragraph')}/>
       case "select_one":
         return <CheckboxAnswer id={id}/>
       default:
@@ -75,50 +44,70 @@ const QuestionItem = ({
   },[typeOfAnswer])
 
   return (  
-    <div ref={wrapperRef} className={`${isActive && 'border-primary'} mt-5 mb-4 bg-white border-start border-3 ps-3`}>
-      <Subtitle label={`Question ${order}`}/>
-      <div className="">
+    <div
+      ref={wrapperRef}
+      className={`
+        card shadow-sm p-4 mb-4
+        ${validationErrors[id] ? 'border border-danger' : 'border border-light'}
+      `}
+    >
+      <Subtitle label={`Question ${order}`} />
+
+      <div className="mb-3">
         <Input 
-          disabled={false}
+          disabled={isSubmitting}
           id={`form_question_title_${id}`}
-          label="Enter the question"
+          label={t('formBuilder.inputQuestionPlaceholder')}
           name="title"
           onChange={(_, value) => updateQuestion(id, { title: value })}
           value={title}
         />
-        <div className="mt-2 fs-6 text-body-secondary">
-          Type of answer
-        </div>
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label text-muted">{t('formBuilder.answerType')}</label>
         <Select 
-          defaultLabel="Short answer" 
-          defaultValue="short_text" 
-          options={selectOptions}
+          disabled={isSubmitting}
+          selectedValue={TYPE_OF_ANSWER_OPTIONS.find(type => type.value === typeOfAnswer)}
+          options={TYPE_OF_ANSWER_OPTIONS}
           onChange={(val) => updateQuestion(id, { typeOfAnswer: val as QuestionType })}
         />
-        <div className="mt-2">
-          {TypeOfAnswerRander}
+      </div>
+
+      <div className="mb-2">
+        {TypeOfAnswerRander}
+      </div>
+
+      <div className="d-flex justify-content-between align-items-center border-top pt-2">
+        <div className="form-check form-switch">
+          <input 
+            disabled={isSubmitting}
+            className="form-check-input" 
+            type="checkbox" 
+            role="switch" 
+            checked={required}
+            id={`form_question_switch_${id}`}
+            onChange={(e) => updateQuestion(id, { required: e.target.checked })}
+          />
+          <label className="form-check-label" htmlFor={`form_question_switch_${id}`}>
+            {t('formBuilder.required')}
+          </label>
         </div>
 
-        <div className="mt-3 d-flex justify-content-between align-items-center">
-          <div className="form-check form-switch">
-            <input 
-              className="form-check-input" 
-              type="checkbox" 
-              role="switch" 
-              checked={required}
-              id={`form_question_switch_${id}`}
-              onChange={(e) => updateQuestion(id, { required: e.target.checked })}
-            />
-            <label className="form-check-label" htmlFor={`form_question_switch_${id}`}>Requared</label>
-          </div>
-          <Button
-            onClick={() => deleteQuestion(id)}
-            label="Delete" 
-            style="red"
-          />
-        </div>
+        <Button
+          disabled={isSubmitting}
+          onClick={() => deleteQuestion(id)}
+          label={t('ui.delete')}
+          style="red"
+        />
       </div>
-    </div>
+
+      {validationErrors[id] && (
+        <div className="text-danger mt-2 small">
+          {validationErrors[id]}
+        </div>
+      )}
+      </div>
   )
 }
  

@@ -1,9 +1,14 @@
-import FormContainer from "./_components/form-container";
+import FormContainer from "../../../_components/form-preview/form-container";
 
-export default function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ formId: string }>
+}) {
+  const { formId } = await params
   return(
     <div className="">
-      <FormContainer/>
+      <FormContainer formId={formId}/>
     </div>
   )
 }

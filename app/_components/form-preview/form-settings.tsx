@@ -1,14 +1,19 @@
-
+'use client'
 import { AddQuestionButton } from "@/app/_components/form-builder/add-question-button";
 import FormBuilder from "@/app/_components/form-builder/form-builder";
 import { Descriptions } from "@/app/_components/form-builder/form-description";
 import { QuestionsList } from "@/app/_components/form-builder/questions-list";
 import Title from "@/app/_components/UI/title";
+import { useTranslations } from "next-intl";
 
-const FormSettings = () => {
+interface FormSettingsType{
+  formId: string
+}
+const FormSettings = ({formId}: FormSettingsType) => {
+  const t = useTranslations()
   return ( 
     <div className="mt-4">
-      <Title label='Form settings'/>
+      <Title label={t('formPreview.formSettings')}/>
       <div className="row mt-3">
         <div className="col">
         <div className="form-check">
@@ -19,7 +24,7 @@ const FormSettings = () => {
         </div>
         </div>
         <div className="col">
-          <FormBuilder formId={undefined}>
+          <FormBuilder formId={formId}>
             <Descriptions />
             <QuestionsList />
             <AddQuestionButton />

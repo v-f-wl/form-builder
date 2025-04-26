@@ -15,12 +15,14 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
-
+import { BootstrapThemeSync } from '@/hooks/theme/BootstrapThemeSync';
+import { Toaster } from 'react-hot-toast';
 
 interface LocaleLayoutProps {
   children: ReactNode;
   params: Promise<{ locale: 'ru'| 'en' }>
 }
+
 export default async function LocaleLayout({children, params}: LocaleLayoutProps){
   const { locale  } = await params
   if (!routing.locales.includes(locale)) {
@@ -32,13 +34,15 @@ export default async function LocaleLayout({children, params}: LocaleLayoutProps
   return (
     <ClerkProvider>
       <html suppressHydrationWarning lang={locale}>
-        <body>
+        <body className="amp-mask">  {/*todo: remove class*/}
           <NextIntlClientProvider messages={messages}>
             <ThemeProvider attribute='class' defaultTheme='system'>
+              <BootstrapThemeSync />
               <LocaleProvider locale={locale}>
                   <ReduxProvider>
                     <Haeader/>
                     {children}
+                    <Toaster position="bottom-right"/>
                   </ReduxProvider>
               </LocaleProvider>
             </ThemeProvider>
