@@ -1,6 +1,68 @@
 {
+  "ui": {
+    "search": "Search",
+    "preview": "Preview",
+    "settings": "Settings",
+    "statistics": "Statistics",
+    "start": "Start",
+    "loading": "Loading",
+    "delete": "Delete",
+    "selectAll": "Select all",
+    "unselectAll": "Unselect all",
+    "create": "Create",
+    "goBack": "Go back",
+    "сompletedForms": "Completed forms",
+    "createdByMe": "Created by me",
+    "users": "Users",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
   "header": {
-    "title":"англ",
-    "about":"en"
+    "searchInputPlaceholder": "Search on app",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+  "homePage": {
+    "popularForms": "Popular Forms",
+    "allForms": "All Forms"
+  },
+  "formPreview": {
+    "formSettings": "Form Settings"
+  },
+  "formBuilder": {
+    "createForm": "Create Form",
+    "addImage": "Add Image",
+    "addTags": "Add Tags",
+    "addTagsHint": "Enter tags (press space to add)",
+    "category": "Category",
+    "title": "Title",
+    "tags":"Tags",
+    "description": "Description",
+    "inputQuestionPlaceholder": "Enter your question",
+    "answerType": "Type of Answer",
+    "shortAnswer": "Short Answer",
+    "paragraph": "Paragraph",
+    "selectOne": "Select One",
+    "oneMore": "One More",
+    "required": "Required",
+    "addQuestions": "Add Question"
+  },
+  "formCategories": {
+    "uncategorized": "No category",
+    "education": "Education",
+    "health": "Health & Wellness",
+    "business": "Business",
+    "event": "Events",
+    "feedback": "Feedback & Reviews",
+    "registration": "Registration",
+    "survey": "Surveys",
+    "job": "Job Application",
+    "personal": "Personal",
+    "other": "Other",
+    "short_text": "Short answer",
+    "paragraph":"Paragraph",
+    "select_one":"Select one"
   }
 }

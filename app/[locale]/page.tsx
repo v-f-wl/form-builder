@@ -1,10 +1,7 @@
-'use client'
-import { useTranslations } from "next-intl";
-import PopulatSection from "./_components/popular-section";
-import FormsList from "./_components/forms-list";
-
+import PopulatSection from "../_components/main-page/popular-section";
+import FormsList from "../_components/main-page/forms-list";
  
-export default function Form() {
+export default async function Form() {
   return (
     <div className="">
       <PopulatSection/>

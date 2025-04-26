@@ -1,6 +1,68 @@
 {
+  "ui": {
+    "search": "Поиск",
+    "preview": "Предпросмотр",
+    "settings": "Настройки",
+    "statistics": "Статистика",
+    "start": "Начать",
+    "loading": "Загрузка",
+    "delete": "Удалить",
+    "selectAll": "Выделить все",
+    "unselectAll": "Снять выделение",
+    "create": "Создать",
+    "goBack": "Назад",
+    "сompletedForms": "Пройденные формы",
+    "createdByMe": "Созданные мной",
+    "users": "Пользователи",
+    "theme": "Тема",
+    "light": "Светлая",
+    "dark": "Тёмная",
+    "system": "Системная"
+  },
   "header": {
-    "title":"русский",
-    "about":"ru"
+    "searchInputPlaceholder": "Поиск по приложению",
+    "signIn": "Войти",
+    "signUp": "Зарегистрироваться"
+  },
+  "homePage": {
+    "popularForms": "Популярные формы",
+    "allForms": "Все формы"
+  },
+  "formPreview": {
+    "formSettings": "Настройки формы"
+  },
+  "formBuilder": {
+    "createForm": "Создать форму",
+    "addImage": "Добавить изображение",
+    "addTags": "Добавить теги",
+    "addTagsHint": "Введите теги (используйте пробел для добавления)",
+    "category": "Категория",
+    "title": "Заголовок",
+    "tags":"Теги",
+    "description": "Описание",
+    "inputQuestionPlaceholder": "Введите ваш вопрос",
+    "answerType": "Тип ответа",
+    "shortAnswer": "Короткий ответ",
+    "paragraph": "Абзац",
+    "selectOne": "Выбрать один",
+    "oneMore": "Ещё один",
+    "required": "Обязательно",
+    "addQuestions": "Добавить вопрос"
+  },
+  "formCategories": {
+    "uncategorized": "Без категории",
+    "education": "Образование",
+    "health": "Здоровье и благополучие",
+    "business": "Бизнес",
+    "event": "События",
+    "feedback": "Отзывы и предложения",
+    "registration": "Регистрация",
+    "survey": "Опросы",
+    "job": "Вакансии",
+    "personal": "Личное",
+    "other": "Другое",
+    "short_text": "Краткий ответ",
+    "paragraph": "Абзац",
+    "select_one": "Выбрать один вариант"
   }
 }

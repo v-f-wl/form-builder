@@ -1,8 +1,16 @@
+import QuestionsContainer from "../../../_components/fill-form/questions-container";
 
-export default function FillForm() {
+export default async function FillForm({
+  params,
+}: {
+  params: Promise<{ formId: string }>
+}) {
+  const { formId } = await params
   return(
     <div className="container">
-      fill form
+      <div className="w-50 mx-auto">
+        <QuestionsContainer formId={formId}/>
+      </div>
     </div>
   )
 }

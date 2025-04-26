@@ -1,11 +1,15 @@
 interface ButtonProps{
   label: string;
   style: 'primary'| 'outline-primary' | 'red';
-  size?: 'small' | 'large'
+  size?: 'small' | 'large';
+  onClick: () => void;
+  disabled?: boolean
 }
-const Button = ({label, style, size = 'small'}: ButtonProps) => {
+const Button = ({label, style, size = 'small', onClick, disabled}: ButtonProps) => {
   return (  
     <button 
+      disabled={disabled}
+      onClick={onClick}
       className={`
         ${style == 'outline-primary' && 'btn-outline-primary'}
         ${style == 'primary' && 'btn-primary'}
