@@ -5,6 +5,7 @@ import { useQuestionLogic } from "@/hooks/form/useQuestionLogic";
 import Loading from "../loading";
 import { ReactNode, useState } from "react";
 import { QuestionFormType } from "@/types";
+import { useTranslations } from "next-intl";
 
 const FormBuilder = ({ children, formId }: { children: ReactNode, formId: string | undefined }) => {
   const {
@@ -18,7 +19,9 @@ const FormBuilder = ({ children, formId }: { children: ReactNode, formId: string
     isSubmitting, 
     setIsSubmitting,
     formCategory, 
-    setFormCategory
+    setFormCategory,
+    tags, 
+    setTags
   } = useFormData(formId);
 
   const {
@@ -29,7 +32,7 @@ const FormBuilder = ({ children, formId }: { children: ReactNode, formId: string
     deleteQuestion,
   } = useQuestionLogic(questionsForm, setQuestionsForm);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
-
+  const t= useTranslations()
   const isEditMode = Boolean(formId);
   if (!isLoaded) return <Loading />;
 
@@ -38,16 +41,16 @@ const FormBuilder = ({ children, formId }: { children: ReactNode, formId: string
     const currentErrors: Record<string, string> = {}
 
     if (!descriptionsForm.title.trim()) {
-      currentErrors["_title"] = "Название формы обязательно";
+      currentErrors["_title"] = t('errors.titleRequired')
     }
   
     if (!descriptionsForm.description.trim()) {
-      currentErrors["_description"] = "Описание формы обязательно";
+      currentErrors["_description"] = t('errors.descriptionRequired')
     }
     
     const hasRequired = questionsForm.some((q) => q.required)
     if (!hasRequired) {
-      currentErrors["_form"] = "В форме должен быть хотя бы один обязательный вопрос"
+      currentErrors["_form"] = t('errors.atLeastOneRequiredQuestion')
     }
 
     questionsForm.forEach((q) => {
@@ -56,13 +59,13 @@ const FormBuilder = ({ children, formId }: { children: ReactNode, formId: string
 
       if (!title) {
         if (q.required) {
-          currentErrors[q.id] = "У обязательного вопроса должен быть заголовок";
+          currentErrors[q.id] = t('errors.requiredQuestionTitleMissing')
         }
         return
       }
 
       if (q.typeOfAnswer === "select_one" && filteredAnswers.length < 2) {
-        currentErrors[q.id] = "Минимум 2 варианта ответа"
+        currentErrors[q.id] = t('errors.minTwoOptions')
         return
       }
 
@@ -72,7 +75,6 @@ const FormBuilder = ({ children, formId }: { children: ReactNode, formId: string
         answersList: filteredAnswers,
       })
     })
-    console.log(currentErrors)
     setValidationErrors(currentErrors)
     return validQuestions
   }
@@ -85,6 +87,8 @@ const FormBuilder = ({ children, formId }: { children: ReactNode, formId: string
         updateAnswer,
         deleteAnswer,
         addAnswer,
+        tags, 
+        setTags,
         updateQuestion,
         deleteQuestion,
         descriptionsForm,

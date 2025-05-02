@@ -1,5 +1,6 @@
 import { InputProps } from "@/types";
 import { ChangeEvent } from "react";
+import ErrorSubtitle from "./error-subtitle";
 
 const Textarea = ({label, disabled, value,  id, onChange, name, error}: InputProps) => {
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -15,7 +16,7 @@ const Textarea = ({label, disabled, value,  id, onChange, name, error}: InputPro
         disabled={disabled}
         onChange={handleChange}
       ></textarea>
-      {error && (<div className="">{error}</div>)}
+      {error && <ErrorSubtitle errorLabel={error}/>}
       <label htmlFor={id}>{label}</label>
     </div>
   )

@@ -46,10 +46,11 @@ export interface ResponseFormData {
   userId: string;
   userName: string;
   createdAt: Date;
-  category: string
+  category: string;
   user?: {
     name: string
-  }
+  };
+  hashtags: Array<string>
 }
 
 export type FormCardProps  = {
@@ -59,3 +60,29 @@ export type FormCardProps  = {
   previewUrl: string;
   id: string;
 }
+
+export type FormSubmissionAnswer = {
+  id: number;
+  title: string;
+  required: boolean;
+  answer: string | null;
+};
+
+export type FormSubmission = {
+  id: number;
+  submittedBy: string;
+  submittedEmail: string;
+  submittedAt: string;
+  answers: FormSubmissionAnswer[];
+};
+
+export type QuestionTemplate = {
+  id: number;
+  title: string;
+  required: boolean;
+};
+
+export type FormSubmissionsResponse = {
+  submissions: FormSubmission[];
+  questionTemplates: QuestionTemplate[];
+};

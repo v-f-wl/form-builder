@@ -27,6 +27,8 @@ interface FormBuilderContextType {
   validationErrors: Record<string, string>;
   setValidationErrors: Dispatch<SetStateAction<Record<string, string>>>;
   validateQuestions: () => QuestionFormType[];
+  tags: Set<string>, 
+  setTags: Dispatch<SetStateAction<Set<string>>>,
 }
 
 export const FormBuilderContext = createContext<FormBuilderContextType | undefined>(undefined);

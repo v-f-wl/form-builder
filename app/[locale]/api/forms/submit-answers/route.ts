@@ -3,6 +3,11 @@ import { answersTable, formSubmissionsTable } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+type Answer = {
+  id: string;
+  value: string;
+};
+
 export async function POST(req: Request) {
   try {
     const { userId } = await auth();
@@ -11,11 +16,13 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    if (!body || !Array.isArray(body)) {
+    if (body.answers.length == 0) {
       return NextResponse.json({ error: "Invalid body" }, { status: 400 });
     }
-
-    const formId = body[0]?.formId;
+    
+    const formId = body.formId
+    const answers: Array<Answer> = body.answers
+    console.log(formId, answers)
     if (!formId) {
       return NextResponse.json({ error: "Form ID missing" }, { status: 400 });
     }
@@ -27,7 +34,7 @@ export async function POST(req: Request) {
       })
       .returning({ id: formSubmissionsTable.id });
 
-    const formattedAnswers = body.map((ans) => ({
+    const formattedAnswers = answers.map((ans) => ({
       submissionId: submission.id,
       questionId: Number(ans.id),
       userId: userId,

@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { formsTable, usersTable } from "@/db/schema";
+import { formsTable, usersTable, formHashtags } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { eq, inArray, and } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
@@ -38,11 +38,15 @@ export async function DELETE(request: NextRequest) {
 
     const body = await request.json();
     const { ids } = body;
-
     if (!Array.isArray(ids) || ids.length === 0) {
       return NextResponse.json({ error: "Missing or invalid ids" }, { status: 400 });
     }
 
+    await db
+      .delete(formHashtags)
+      .where(
+        inArray(formHashtags.formId, ids.map(Number))
+      );
     await db
       .delete(formsTable)
       .where(and(
@@ -52,6 +56,7 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ message: "Forms deleted" }, { status: 200 });
   } catch (error) {
+    console.log(error)
     return NextResponse.json({ error: "Delete failed" }, { status: 500 });
   }
 }

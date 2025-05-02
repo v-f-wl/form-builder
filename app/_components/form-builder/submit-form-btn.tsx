@@ -8,8 +8,9 @@ import { useLocale } from "@/app/context/locale-context";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import toast from "react-hot-toast";
+import ErrorSubtitle from "../UI/error-subtitle";
 const SubmitFormBtn = () => {
-  const  { descriptionsForm, isSubmitting, setIsSubmitting, formCategory, validateQuestions, validationErrors} = useFormBuilder()
+  const  { descriptionsForm, isSubmitting, setIsSubmitting, tags, formCategory, validateQuestions, validationErrors} = useFormBuilder()
   const t = useTranslations()
   const { userId } = useAuth()
   const locale = useLocale()
@@ -19,7 +20,7 @@ const SubmitFormBtn = () => {
     if(isSubmitting) return
     const validQuestions = validateQuestions()
     if(validQuestions.length == 0 || Object.keys(validationErrors).length > 0){
-      toast.error('sorry, you have some in')
+      toast.error(t('errors.genericFormInvalid'))
       return
     }
     try{
@@ -30,6 +31,7 @@ const SubmitFormBtn = () => {
           formCategory: formCategory,
           questions: validQuestions,
           userId: userId,
+          hashtagsArray: Array.from(tags)
       })
       route.push(`/form/${result.data.formId}`)
     }catch(error){
@@ -39,9 +41,7 @@ const SubmitFormBtn = () => {
   return ( 
     <div className="text-center mt-4">
       <Button disabled={isSubmitting} label={t('ui.create')} style="primary" onClick={handeCreateForm}/>
-      {validationErrors._form && (
-        <div className="">{validationErrors._form}</div>
-      )}
+      {validationErrors._form && <ErrorSubtitle errorLabel={validationErrors._form}/>}
     </div>
   )
 }

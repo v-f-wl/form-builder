@@ -12,7 +12,7 @@ interface QuestionItemProps{
   typeOfAnswer: QuestionType;
   id: string;
   answersList: Array<Answer>;
-  // value: string;
+  disabled: boolean;
   updateAnswes: (questionId: string, value: string | null) => void;
 }
 const QuestionItem = ({
@@ -22,22 +22,28 @@ const QuestionItem = ({
   typeOfAnswer,
   id,
   answersList,
-  updateAnswes
+  updateAnswes,
+  disabled
 }: QuestionItemProps) => {
   const ActiveTab = useMemo(() => {
     switch (typeOfAnswer) {
       case "short_text":
-        return <Input label="Ваш ответ" name='answer' id={`input-${id}`}  onChange={(_, value) => updateAnswes(id, value)}/>
+        return <Input disabled={disabled} label="Ваш ответ" name='answer' id={`input-${id}`}  onChange={(_, value) => updateAnswes(id, value)}/>
       case "paragraph":
-        return <Textarea label="Ваш ответ" name='answer' id={`textarea-${id}`}  onChange={(_, value) => updateAnswes(id, value )}/>
+        return <Textarea disabled={disabled} label="Ваш ответ" name='answer' id={`textarea-${id}`}  onChange={(_, value) => updateAnswes(id, value )}/>
       case "select_one":
-        return <SingleSelectCheckboxGroup answersList={answersList} onChange={(value) => updateAnswes(id, value )} returnType='value'/>
+        return <SingleSelectCheckboxGroup  disabled={disabled} answersList={answersList} onChange={(value) => updateAnswes(id, value )} returnType='value'/>
       default:
         return <div className="text-danger">Unknown tab:</div>;
-  }},[typeOfAnswer])
+  }},[typeOfAnswer, disabled])
 
   return ( 
-    <div className="border-start border-2 p-2">
+    <div 
+      className={`
+        ${disabled && 'opacity-70' }
+        border-start border-2 p-2 
+      `}
+    >
       <div className="d-flex gap-1">
         <Subtitle label={`${index}  ${title}`}/>{isRequired && <span className="text-danger">*</span>}
       </div>

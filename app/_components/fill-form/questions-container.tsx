@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import QuestionItem from "./question-item";
 import axios from "axios";
 import { QuestionFormType } from "@/types";
@@ -8,6 +8,9 @@ import Loading from "@/app/_components/loading";
 import CrashMessage from "@/app/_components/crash-message";
 import Button from "../UI/button";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export interface AnswerSubmission {
   questionId: string;
@@ -20,19 +23,29 @@ interface AnswersList {
   id: string,
   value: string | null
 }
-const QuestionsContainer = ({ formId }: { formId: string }) => {
-  const locale = useLocale();
-  const [isLoading, setIsLoading] = useState(true);
+const QuestionsContainer = ({ 
+  formId,
+  status,
+  reason
+}:{ 
+  formId: string,
+  status: string,
+  reason: string | undefined
+}) => {
+  const locale = useLocale()
+  const route = useRouter()
+  const t = useTranslations()
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isError, setIsError] = useState(false);
   const [formQuestions, setFormQuestions] = useState<QuestionFormType[] | null>(null)
   const [answers, setAnswers] = useState<AnswersList[]>([])
   
-  useEffect(()=>{console.log(answers)},[answers])
   useEffect(() => {
     const getFormQuestions = async () => {
       try {
         setIsLoading(true)
-        const response = await axios.get<{ questions: QuestionFormType[] }>(
+        const response = await axios.get<{ questions: QuestionFormType[]}>(
           `/${locale}/api/forms/form-questions?formId=${formId}`
         );
         setFormQuestions(response.data.questions)
@@ -59,11 +72,13 @@ const QuestionsContainer = ({ formId }: { formId: string }) => {
   }
 
   const handleSubmit = async () => {
+    setIsSubmitting(true)
     try{
-      const result = await axios.post(`/${locale}/api/forms/submit-answers`, {...answers, formId})
-      toast.success(result.data.success) // todo: добавить сообщение с переводом
+      await axios.post(`/${locale}/api/forms/submit-answers`, {answers:[...answers], formId})
+      route.push('/completed-form')
     }catch(error){
       toast.error('err') // todo: добавить ошибку с переводом
+      setIsSubmitting(false)
     }
   }
 
@@ -72,7 +87,15 @@ const QuestionsContainer = ({ formId }: { formId: string }) => {
   if (!formQuestions) return <div>Form unavailable</div>
 
   return (
-    <div>
+    <div className={`${status === 'readonly' && 'opacity-75'}`}>
+      <Link href={'/'} className="mt-4 d-inline-block btn active">
+        {t('ui.goBack')}
+      </Link>
+      {status === 'readonly' && reason && (
+        <div className="alert alert-warning mt-3" role="alert">
+          {t(`formAccess.${reason}`)}
+        </div>
+      )}    
       <div className="mt-4 mx-auto d-flex flex-column gap-4">
         {formQuestions.sort((a, b) => Number(a.id) - Number(b.id)).map((q, idx) => (
           <QuestionItem
@@ -84,11 +107,12 @@ const QuestionsContainer = ({ formId }: { formId: string }) => {
             typeOfAnswer={q.typeOfAnswer}
             answersList={q.answersList}
             updateAnswes={handleAnswerChange}
+            disabled={isSubmitting || status === 'readonly'}
           />
         ))}
       </div>
       <div className="mt-4 text-center">
-        <Button style="primary" onClick={handleSubmit} label="Send" />
+        {status ==="editable" && <Button disabled={isSubmitting} style="primary" onClick={handleSubmit} label="Send" />}
       </div>
     </div>
   );

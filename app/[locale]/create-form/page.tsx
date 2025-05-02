@@ -13,12 +13,13 @@ import FormRules from "@/app/_components/form-builder/form-rules";
 export default function CreatePage(){
   const t = useTranslations()
   return (  
-    <div className="container">
-      <Link href={'/'} className="mt-4 d-inline-block btn active">
+    <div className="container px-3">
+      <Link href="/" className="mt-4 d-inline-block btn active">
         {t('ui.goBack')}
       </Link>
-      <div className="w-50 mx-auto">
-        <Title label={t('formBuilder.createForm')}/>
+
+      <div className="mx-auto w-100 w-md-75 w-lg-50 mt-4">
+        <Title label={t('formBuilder.createForm')} />
         <FormBuilder formId={undefined}>
           <FormRules/>
           <Descriptions />

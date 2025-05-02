@@ -5,13 +5,15 @@ interface SingleSelectCheckboxGroupProps {
   answersList: Answer[];
   onChange: (selectedId: string | null) => void;
   returnType?: "id" | "value";
+  disabled: boolean
 }
 
-const SingleSelectCheckboxGroup = ({ answersList, onChange, returnType = "id" }: SingleSelectCheckboxGroupProps) => {
+const SingleSelectCheckboxGroup = ({ answersList, onChange, disabled, returnType = "id" }: SingleSelectCheckboxGroupProps) => {
   const [selectedId, setSelectedId] = useState<string | null>(null)
 
   
   const handleChange = (id: string) => {
+    if(disabled) return
     const newSelectedId = selectedId === id ? null : id
     setSelectedId(newSelectedId)
 
@@ -25,6 +27,7 @@ const SingleSelectCheckboxGroup = ({ answersList, onChange, returnType = "id" }:
       {answersList.map((answer) => (
         <div className="form-check" key={answer.id}>
           <input
+            disabled={disabled}
             className="form-check-input"
             type="checkbox"
             id={`checkbox-${answer.id}`}

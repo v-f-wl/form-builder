@@ -1,16 +1,18 @@
+import { useTranslations } from "next-intl";
+
 const FormRules = () => {
+  const t = useTranslations('formCreationNotice');
   return ( 
-    <div className="mb-4" role="alert">
-      <h5 className="alert-heading">Прежде чем создать форму:</h5>
+    <div className="mb-4 alert alert-warning" role="alert">
+      <h5 className="alert-heading">{t('heading')}</h5>
       <ul className="mb-0">
-        <li>Название и описание формы обязательны для заполнения.</li>
-        <li>Форма должна содержать хотя бы <strong>один обязательный вопрос</strong>.</li>
-        <li>Вопросы без заголовка <strong>не будут сохранены</strong>.</li>
-        <li>Для типа ответа <code>select one</code> (чекбокс) должно быть минимум <strong>2 непустых варианта ответа</strong>.</li>
-        <li>Пустые поля ответа автоматически <strong>удаляются</strong>.</li>
+        <li>{t('requirements.titleAndDescription') }</li>
+        <li>{t('requirements.requiredQuestion') }</li>
+        <li>{t('requirements.untitledQuestions') }</li>
+        <li>{t('requirements.selectOneOptions') }</li>
+        <li>{t('requirements.emptyOptionsRemoved') }</li>
       </ul>
     </div>
   );
 }
- // todo: добавить перевод
 export default FormRules;

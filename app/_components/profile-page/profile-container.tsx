@@ -1,14 +1,14 @@
 'use client'
 import { useMemo, useState } from "react";
 import FormTabs from "../form-preview/form-tabs";
-import { usePermission } from "@/hooks/user/usePermission";
 import CreatedFormsTable from "./created-forms-table";
 import CompletedFormsList from "./completed-forms-list";
 import UsersTable from "./users-table";
+import { usePermission } from "@/app/context/permission-context";
 
 const ProfileContainer = () => {
   const [activeTab, setActiveTab] = useState('createdByMe')
-  const { userPermission, isLoadedPermission } = usePermission()
+  const { userPermission, isLoadingPermission } = usePermission()
   const handleChangeValue = (value: string) => {
     setActiveTab(prev => value)
   }
@@ -16,9 +16,9 @@ const ProfileContainer = () => {
   const ADMIN_TABS = ['createdByMe', 'сompletedForms', 'users']
 
   const options = useMemo(() => {
-    if (!isLoadedPermission) return []
+    if (isLoadingPermission) return []
     return userPermission === 'user' ? USER_TABS : ADMIN_TABS
-  }, [isLoadedPermission, userPermission])
+  }, [isLoadingPermission, userPermission])
 
   const ActiveTab = useMemo(() => {
     switch (activeTab) {
@@ -32,7 +32,7 @@ const ProfileContainer = () => {
         return <div className="text-red-500">Unknown tab:</div>;
   }},[activeTab])
 
-  if (!isLoadedPermission) {
+  if (isLoadingPermission) {
     return <div className="text-muted">Loading...</div>
   }
   return ( 

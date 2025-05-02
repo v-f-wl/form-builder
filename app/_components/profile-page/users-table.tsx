@@ -88,20 +88,6 @@ const UsersTable = () => {
           onClick={handleDelete}
           disabled={selected.size === 0}
         >
-          Block
-        </button>
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={handleDelete}
-          disabled={selected.size === 0}
-        >
-          unblock
-        </button>
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={handleDelete}
-          disabled={selected.size === 0}
-        >
           admin
         </button>
         <button
@@ -117,8 +103,7 @@ const UsersTable = () => {
           <tr>
             <th scope="col"></th>
             <th scope="col">Name</th>
-            <th scope="col">{t('formBuilder.category')}</th>
-            <th scope="col">Blocked</th>
+            <th scope="col">email</th>
             <th scope="col">Is admin</th>
             <th scope="col">Created At</th>
           </tr>
@@ -139,9 +124,6 @@ const UsersTable = () => {
               </td>
 
               <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</td>
-              <td>
-                {user.isBlocked ? 'Blocked' : 'Active'}
-              </td>
               <td>{user.permission}</td>
               <td>{user.createdAt}</td>
             </tr>

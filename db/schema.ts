@@ -84,13 +84,13 @@ export const formSubmissionsTable = pgTable("form_submissions", {
 })
 
 export const hashtags = pgTable('hashtags', {
-  id: integer('id').primaryKey(),
+  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   name: varchar('name', {length: 255}).unique(),
   count: integer('count').default(1),
 });
 
-export const formHashtags = pgTable('post_hashtags', {
+export const formHashtags = pgTable('form_hashtags', {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  postId: integer('post_id').references(() => formsTable.id),
+  formId: integer('form_id').references(() => formsTable.id),
   hashtagId: integer('hashtag_id').references(() => hashtags.id),
 });

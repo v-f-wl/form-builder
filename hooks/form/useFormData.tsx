@@ -11,6 +11,7 @@ export const useFormData = (formId?: string) => {
   const [formCategory, setFormCategory] = useState('uncategorized')
   const [formImage, setFormImage] = useState<File | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [tags, setTags] = useState<Set<string>>(new Set())
   const locale = useLocale()
 
   useEffect(() => {
@@ -51,6 +52,8 @@ export const useFormData = (formId?: string) => {
     isSubmitting,
     setIsSubmitting,
     formCategory, 
-    setFormCategory
+    setFormCategory,
+    tags, 
+    setTags
   }
 }

@@ -64,5 +64,30 @@
     "short_text": "Short answer",
     "paragraph":"Paragraph",
     "select_one":"Select one"
+  },
+  "formAccess": {
+    "author_cannot_fill": "The creator of the form cannot fill it out.",
+    "guest_cannot_fill": "You must be signed in to fill out this form.",
+    "already_submitted": "You have already submitted this form.",
+    "form_not_found": "The form was not found."
+  },
+  "errors": {
+    "formCreationFailed": "Sorry, we can't create the form – some rules were not met",
+    "titleRequired": "Form title is required",
+    "descriptionRequired": "Form description is required",
+    "atLeastOneRequiredQuestion": "The form must have at least one required question",
+    "requiredQuestionTitleMissing": "Required question must have a title",
+    "minTwoOptions": "Minimum of 2 answer options",
+    "genericFormInvalid": "Some form creation rules were not met – please check again"
+  },
+  "formCreationNotice": {
+    "heading": "Before creating a form:",
+    "requirements": {
+      "titleAndDescription": "Form title and description are required.",
+      "requiredQuestion": "The form must contain at least one required question.",
+      "untitledQuestions": "Questions without a title will not be saved.",
+      "selectOneOptions": "For select one type, there must be at least 2 non-empty option .",
+      "emptyOptionsRemoved": "Empty answer fields will be automatically remove ."
+    }
   }
 }

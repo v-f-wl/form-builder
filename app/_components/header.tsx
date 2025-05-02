@@ -1,57 +1,47 @@
 'use client'
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import Logo from "./UI/logo";
 import SearchInput from "./UI/search-input";
 import LanguageSwitch from "./UI/language-switch";
-import { useTranslations } from "next-intl";
 import { ThemeSwitcher } from "./UI/theme-switch";
-import IProfile from "./icons/profile-icon";
 import HeaderCreateFormBtn from "./UI/header-create-form-btn";
+import AuthButtons from "./UI/auth-buttons";
 
-const Haeader = () => {
-  const t = useTranslations()
-  return ( 
-    <div className="container mt-4">
-      <div className="row align-items-center">
-        <div className="col-2">
-          <Logo/>
+const Header = () => {
+  return (
+    <nav className="navbar navbar-expand-md  px-4 py-3">
+      <Logo />
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarContent"
+        aria-controls="navbarContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon" />
+      </button>
+
+      <div className="collapse navbar-collapse mt-2 mt-md-0 ms-3" id="navbarContent">
+        <div className="d-md-none mb-2">
+          {/* <SearchInput /> */}
         </div>
-        <div className="col d-flex">
-          <SearchInput/>
-        </div>
-        <div className="col d-flex justify-content-end gap-3">
-          <LanguageSwitch/>
-          <ThemeSwitcher/>
-          <HeaderCreateFormBtn/>
-          <div className="d-flex gap-3 align-items-center justify-content-end">
-            <SignedOut>
-              <SignInButton>
-                <button className="btn btn-primary">
-                  {t('header.signIn')}
-                </button>
-              </SignInButton>
-              <SignUpButton>
-              <button className="btn btn-outline-primary">
-                  {t('header.signUp')}
-                </button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
-            <UserButton>
-              <UserButton.MenuItems>
-                <UserButton.Link
-                  label='Profile'
-                  labelIcon={<IProfile />}
-                  href="/profile"
-                />
-              </UserButton.MenuItems>
-            </UserButton>
-            </SignedIn>
-          </div>
+
+        <ul className="navbar-nav me-auto d-none d-md-flex w-50">
+          <li className="nav-item w-100">
+            {/* <SearchInput /> */}
+          </li>
+        </ul>
+
+        <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 ms-md-auto">
+          <LanguageSwitch />
+          <ThemeSwitcher />
+          <HeaderCreateFormBtn />
+          <AuthButtons />
         </div>
       </div>
-    </div>
-  )
-}
+    </nav>
+  );
+};
  
-export default Haeader;
+export default Header;

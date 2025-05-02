@@ -15,6 +15,27 @@
       "when": 1745666879276,
       "tag": "0001_white_madame_hydra",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1745710550078,
+      "tag": "0002_right_galactus",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1745711094082,
+      "tag": "0003_supreme_expediter",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1745711447339,
+      "tag": "0004_lethal_mikhail_rasputin",
+      "breakpoints": true
     }
   ]
 }

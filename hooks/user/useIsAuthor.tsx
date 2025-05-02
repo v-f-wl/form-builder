@@ -1,14 +1,18 @@
-'use client'
 import { useAuth } from "@clerk/nextjs";
-import axios from "axios";
 import useSWR from "swr";
+import axios from "axios";
 
-const fetcher = (url: string) => axios.get(url).then(res => res.data.authorId);
+const fetcher = (url: string) => axios.get(url).then(res => res.data.isAuthor as boolean | null);
 
 export function useIsAuthor(formId: string) {
   const { userId } = useAuth();
-  const { data: authorId, error, isLoading } = useSWR<string>(userId && formId ? `/api/forms/get-author?formId=${formId}`: null, fetcher);
+  const shouldFetch = Boolean(userId && formId);
 
-  const isAuthor = !isLoading && !error && authorId === userId;
-  return { isAuthor, isLoaded: !isLoading, error };
+  const { data: isAuthor, error, isLoading } = useSWR<boolean | null>(
+    shouldFetch ? `/en/api/forms/get-author?formId=${formId}` : null,
+    fetcher
+  );
+
+  const isInvalidForm = !isLoading && (isAuthor === null || isAuthor === undefined);
+  return { isAuthor, isLoaded: !isLoading, isInvalidForm, error };
 }

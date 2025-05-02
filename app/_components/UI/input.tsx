@@ -1,5 +1,6 @@
 import { InputProps } from "@/types";
 import { ChangeEvent } from "react";
+import ErrorSubtitle from "./error-subtitle";
 
 
 const Input = ({value, label, disabled, id, onChange, name, error }: InputProps) => {
@@ -18,7 +19,7 @@ const Input = ({value, label, disabled, id, onChange, name, error }: InputProps)
         onChange={handleChange}
         value={value}
       />
-      {error && (<div className="">{error}</div>)}
+      {error && <ErrorSubtitle errorLabel={error}/>}
       <label htmlFor={id}>{label}</label>
     </div>
   )

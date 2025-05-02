@@ -1,13 +1,14 @@
 'use client'
 import { useLocale } from "@/app/context/locale-context";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FormPreview from "./form-preview";
 import FormSettings from "./form-settings";
 import FormTabs from "./form-tabs";
-import { usePermission } from "@/hooks/user/usePermission";
 import Loading from "../loading";
-import FormResultViewer from "./form-statistics";
+import FormResultViewer from "./form-submissions-viewer";
 import { useIsAuthor } from "@/hooks/user/useIsAuthor";
+import { usePermission } from "@/app/context/permission-context";
+import FormSubmissionsViewer from "./form-submissions-viewer";
 
 const FormContainer = ({formId}: {formId: string}) => {
   const locale = useLocale()
@@ -19,11 +20,8 @@ const FormContainer = ({formId}: {formId: string}) => {
   }
   if(!formId) return
   const [activeTab, setActiveTab] = useState('preview')
-  const { userPermission, isLoadedPermission } = usePermission()
-  const { isAuthor, isLoaded: isLoadedAuthor, error } = useIsAuthor(formId)
-  const handleChangeActiveTab = (value: string) => {
-    setActiveTab(prev => value)
-  } 
+  const { userPermission, isLoadingPermission } = usePermission()
+  const { isAuthor, isLoaded: isLoadedAuthor } = useIsAuthor(formId)
 
   const ActiveTab = useMemo(() => {
     switch (activeTab) {
@@ -33,27 +31,28 @@ const FormContainer = ({formId}: {formId: string}) => {
         return <FormSettings formId={formId}/>
       case "statistics":
       default:
-        return <FormResultViewer/>
+        return <FormSubmissionsViewer formId={formId}/>
   }},[activeTab])
 
   const tabsList = useMemo(() => {
-    const tabs = ["preview"] as string[]
-    if (userPermission == "admin" || isAuthor) {
-      tabs.push("settings")
-      tabs.push("statistics")
+    if (userPermission !== 'admin' && !isAuthor) return ['preview']
+    const tabs = ["preview"] as string[];
+    if (userPermission === "admin" || isAuthor) {
+      tabs.push("settings");
+      tabs.push("statistics");
     }
-    return tabs
-  }, [userPermission, isAuthor])
+    return tabs;
+  }, [ userPermission, isLoadingPermission, isLoadedAuthor, isAuthor]);
 
-  
-
-  const isReady = isLoadedPermission && isLoadedAuthor
-  if (!isReady) {
+  const handleChangeActiveTab = (value: string) => {
+    setActiveTab(prev => value)
+  } 
+  if (!userPermission || !isLoadedAuthor) {
     return (
       <div className="container mt-4">
         <Loading />
       </div>
-    )
+    );
   }
 
   return (

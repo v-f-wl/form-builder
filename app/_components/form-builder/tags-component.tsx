@@ -5,13 +5,15 @@ import IClose from "../icons/close-icon";
 import Subtitle from "../UI/subtitle";
 import TagItem from "./tag-item";
 import { useTranslations } from "next-intl";
+import { useFormBuilder } from "@/app/context/form-builder-context";
 
 
 
 const TagsComponent = () => {
-  const [tags, setTags] = useState<Set<string>>(new Set())
+  const { tags, setTags } = useFormBuilder()
   const [tagValue, setTagValue] = useState('')
   const t = useTranslations()
+
   const handleAddTag = (tag: string) => {
     if(tagValue.trim().length < 1) return
     setTags(prev => new Set([...prev, tag]))

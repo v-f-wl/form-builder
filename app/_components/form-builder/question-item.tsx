@@ -78,7 +78,7 @@ const QuestionItem = ({
         {TypeOfAnswerRander}
       </div>
 
-      <div className="d-flex justify-content-between align-items-center border-top pt-2">
+      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center border-top pt-3 gap-3">
         <div className="form-check form-switch">
           <input 
             disabled={isSubmitting}
@@ -94,12 +94,14 @@ const QuestionItem = ({
           </label>
         </div>
 
-        <Button
-          disabled={isSubmitting}
-          onClick={() => deleteQuestion(id)}
-          label={t('ui.delete')}
-          style="red"
-        />
+        <div>
+          <Button
+            disabled={isSubmitting}
+            onClick={() => deleteQuestion(id)}
+            label={t('ui.delete')}
+            style="red"
+          />
+        </div>
       </div>
 
       {validationErrors[id] && (
@@ -107,7 +109,7 @@ const QuestionItem = ({
           {validationErrors[id]}
         </div>
       )}
-      </div>
+    </div>
   )
 }
  

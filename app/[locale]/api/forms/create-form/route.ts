@@ -1,6 +1,7 @@
 import { db } from "@/db";
-import { formsTable, questionOptionsTable, questionsTable } from "@/db/schema";
+import { formsTable, questionOptionsTable, questionsTable, hashtags, formHashtags } from "@/db/schema";
 import {  QuestionType } from "@/types";
+import { eq } from "drizzle-orm";
 
 type IncomingQuestion = {
   id: string;
@@ -14,13 +15,15 @@ type IncomingQuestion = {
 export async function POST(req: Request) {
   // todo: добавить try catch
   const body = await req.json()
-  const { title, description, questions, userId, formCategory } = body as {
+  const { title, description, questions, userId, formCategory, hashtagsArray } = body as {
     title: string;
     description: string;
     questions: IncomingQuestion[];
     userId: string;
     formCategory: string;
+    hashtagsArray: Array<string>
   };
+  console.log(hashtagsArray)
   const [form] = await db
     .insert(formsTable)
     .values({ title, description, userId, category: formCategory })
@@ -49,6 +52,35 @@ export async function POST(req: Request) {
       await db.insert(questionOptionsTable).values(optionsToInsert);
     }
   }
+  for (const tagName of hashtagsArray) {
+    const [existingTag] = await db
+      .select()
+      .from(hashtags)
+      .where(eq(hashtags.name, tagName))
+      .limit(1);
+  
+    let hashtagId: number;
+  
+    if (existingTag) {
+      hashtagId = existingTag.id;
+      await db
+        .update(hashtags)
+        .set({ count: (existingTag.count ?? 0) + 1 })
+        .where(eq(hashtags.id, existingTag.id))
+    } else {
+      const [newTag] = await db
+        .insert(hashtags)
+        .values({ name: tagName })
+        .returning({ id: hashtags.id });
+  
+      hashtagId = newTag.id;
+    }
+    await db.insert(formHashtags).values({
+      formId,
+      hashtagId,
+    });
+  }
+  
   return new Response(JSON.stringify({ message: "Form created", formId }), {
     status: 201,
   });
