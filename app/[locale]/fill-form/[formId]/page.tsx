@@ -9,9 +9,9 @@ import { useTranslations } from "next-intl";
 export default async function FillForm({
   params,
 }: {
-  params: { formId: string }
+  params: Promise<{ formId: string }>
 }) {
-  const { formId } = params;
+  const { formId } = await params
   const { status, reason } = await checkFormAccess(formId)
   return(
     <div className="container my-4">
