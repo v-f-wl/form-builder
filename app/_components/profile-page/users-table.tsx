@@ -5,6 +5,8 @@ import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import Loading from "../loading"
 import { format } from 'date-fns'
+import { useRouter } from "next/navigation"
+import toast from "react-hot-toast"
 
 type User = {
   id: string,
@@ -22,6 +24,7 @@ const UsersTable = () => {
   const [isLoaded, setIsLoaded] = useState(false)
   const locale = useLocale()
   const t = useTranslations()
+  const route = useRouter()
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -29,7 +32,7 @@ const UsersTable = () => {
         const res = await axios.get(`/${locale}/api/users/get-all-users?offset=0`)
         setUsersList(res.data.users)
       } catch (err: any) {
-        console.error('kjn',err)
+        toast.error('Something went wrong')
       }finally{
         setIsLoaded(true)
       }
@@ -60,12 +63,22 @@ const UsersTable = () => {
   const handleSwitchUserPermission = async(permission: 'admin' | 'user') => {
     const selectedIds: number[] = Array.from(selected).map(id => Number(id));
     try{
-      await axios.patch(`/${locale}/api/users/switch-user-permission`,{
+      const response = await axios.patch(`/${locale}/api/users/switch-user-permission`,{
         userIds: selectedIds,
         permission: permission
       })
+      if(!response.data.isAdmin){
+        route.push('/')
+      }
+      toast.success('Permissions were changed')
+      setUsersList(prev => response.data.usersList)
+      setSelected(new Set())
     }catch(error){
-
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.error || "Unknown server error");
+      } else {
+        toast.error("Unexpected error");
+      }
     }
   }
   if(!isLoaded){

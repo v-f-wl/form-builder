@@ -1,9 +1,8 @@
-// hooks/context/PermissionContext.tsx
 'use client';
 
 import { createContext, useContext } from 'react';
 import axios from 'axios';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 
 type PermissionContextType = {
   userPermission: string | null;
@@ -21,7 +20,7 @@ export const PermissionProvider = ({ children }: { children: React.ReactNode }) 
     revalidateOnFocus: true,
   });
   return (
-    <PermissionContext.Provider value={{ userPermission, isLoadingPermission }}>
+    <PermissionContext.Provider value={{ userPermission, isLoadingPermission}}>
       {children}
     </PermissionContext.Provider>
   );
