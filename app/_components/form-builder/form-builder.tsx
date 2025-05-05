@@ -4,8 +4,13 @@ import { useFormData } from "@/hooks/form/useFormData";
 import { useQuestionLogic } from "@/hooks/form/useQuestionLogic";
 import Loading from "../loading";
 import { ReactNode, useState } from "react";
-import { QuestionFormType } from "@/types";
+import { QuestionFormType, ValidateQuestionsResult } from "@/types";
 import { useTranslations } from "next-intl";
+import axios from "axios";
+import { useLocale } from "@/app/context/locale-context";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const FormBuilder = ({ children, formId }: { children: ReactNode, formId: string | undefined }) => {
   const {
@@ -33,13 +38,12 @@ const FormBuilder = ({ children, formId }: { children: ReactNode, formId: string
   } = useQuestionLogic(questionsForm, setQuestionsForm);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
   const t= useTranslations()
-  const isEditMode = Boolean(formId);
-  if (!isLoaded) return <Loading />;
+  const isEditMode = Boolean(formId)
+  if (!isLoaded) return <Loading />
 
-  const validateQuestions = (): QuestionFormType[] => {
+  const validateQuestions = (): ValidateQuestionsResult => {
     const validQuestions: QuestionFormType[] = []
     const currentErrors: Record<string, string> = {}
-
     if (!descriptionsForm.title.trim()) {
       currentErrors["_title"] = t('errors.titleRequired')
     }
@@ -76,7 +80,7 @@ const FormBuilder = ({ children, formId }: { children: ReactNode, formId: string
       })
     })
     setValidationErrors(currentErrors)
-    return validQuestions
+    return {currentErrors, validQuestions}
   }
 
   return (
@@ -103,6 +107,7 @@ const FormBuilder = ({ children, formId }: { children: ReactNode, formId: string
         validationErrors,
         setValidationErrors,
         validateQuestions,
+        formId
       }}
     >
       <div className="my-4 w-full">{children}</div>

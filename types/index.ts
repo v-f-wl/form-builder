@@ -2,6 +2,11 @@ export type FormTabsType = 'preview' | 'settings' | 'statistics'
 export type QuestionType = "short_text" | "paragraph" | "select_one" | "number"
 
 
+export type ValidateQuestionsResult = {
+  validQuestions: QuestionFormType[];
+  currentErrors: Record<string, string>;
+};
+
 export interface FormQuestionsBuilder{
   userId?: string; //todo fix optional
   title: string;

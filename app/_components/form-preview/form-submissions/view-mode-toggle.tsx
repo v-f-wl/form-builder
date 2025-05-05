@@ -1,4 +1,5 @@
 'use client'
+import { useTranslations } from "next-intl";
 
 type ViewMode = 'split' | 'table'
 
@@ -9,6 +10,7 @@ export function ViewModeToggle({
   viewMode: ViewMode;
   setViewMode: (mode: ViewMode) => void;
 }) {
+  const t = useTranslations()
   return (
     <div className="btn-group" role="group">
       <input 
@@ -20,7 +22,7 @@ export function ViewModeToggle({
         checked={viewMode === 'split'}
         onChange={() => setViewMode('split')}
       />
-      <label className="btn btn-outline-primary" htmlFor="view-split">Просмотр по одному</label>
+      <label className="btn btn-outline-primary" htmlFor="view-split">{t('ui.singleView')}</label>
 
       <input 
         type="radio" 
@@ -31,7 +33,7 @@ export function ViewModeToggle({
         checked={viewMode === 'table'}
         onChange={() => setViewMode('table')}
       />
-      <label className="btn btn-outline-primary" htmlFor="view-table">Сводная таблица</label>
+      <label className="btn btn-outline-primary" htmlFor="view-table">{t('ui.summaryTable')}</label>
     </div>
   )
 }

@@ -16,36 +16,62 @@ const PopularFormsData = () => {
     errorRetryCount: 3,    
     errorRetryInterval: 1000
   });
-  useEffect(() => {console.log(data)},[data])
   if(isLoading){
     return <Skeleton count={5}/>
   }
   if(!data){
     return null
   }
-  if(error){
+  if(error && !data){
     return <CrashMessage onClick={() => {}}/>
+  }
+  if(data.length === 0){
+    return (
+      <div className="">Forms doesnt exist</div>
+    )
   }
   return (  
     <div className="">
-    {data.map((form, index) => (
-      <Link key={`popularForms-${form.id}`} href={`/form/${form.id}`} className="grid-table">
-        <div>{index + 1}</div>
-        <div>{form.user?.name}</div>
-        <div>{form.title}</div>
+      {data.map((form, index) => (
+        <Link key={`popularForms-${form.id}`} href={`/form/${form.id}`} className="grid-table gap-2 pb-2">
+          <div>
+            {index + 1}
+          </div>
+          <div>
+            {form.user?.name}
+          </div>
+          <div>
+            {form.title}
+          </div>
         
-        {/* Категория – скроется на sm */}
-        <div className="d-none d-sm-block">
-          {t(`formCategories.${form.category}`, { defaultValue: 'Unknown category' })}
-        </div>
-  
-        {/* Теги – скроются на md */}
-        <div className="d-none d-md-block">tag</div>
-  
-        <div>{format(new Date(form.createdAt), 'dd.MM.yyyy')}</div>
-      </Link>
-    ))}
-  </div>
+          <div className="d-none d-sm-block">
+            {t(`formCategories.${form.category}`, { defaultValue: 'Unknown category' })}
+          </div>
+    
+          <div className="d-none d-md-flex gap-1 w-25">
+          {form.hashtags.length > 0 ? (
+              <>
+                {form.hashtags.slice(0, 3).map((item) => (
+                  <div key={item} className="badge text-bg-primary">#{item}</div>
+                ))}
+                {form.hashtags.length > 3 && (
+                  <div
+                    className="badge text-bg-secondary"
+                    title={form.hashtags.slice(3).join(', ')}
+                  >
+                    +{form.hashtags.length - 3}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div>-</div>
+            )}
+          </div>
+    
+          <div className='text-end'>{format(new Date(form.createdAt), 'dd.MM.yyyy')}</div>
+        </Link>
+      ))}
+    </div>
   
   );
 }

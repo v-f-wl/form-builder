@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     formCategory: string;
     hashtagsArray: Array<string>
   };
-  console.log(hashtagsArray)
+
   const [form] = await db
     .insert(formsTable)
     .values({ title, description, userId, category: formCategory })

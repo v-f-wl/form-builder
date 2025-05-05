@@ -1,6 +1,6 @@
 'use client'
 import { createContext, Dispatch, SetStateAction, useContext } from "react";
-import type { QuestionFormType } from "@/types";
+import type { QuestionFormType, ValidateQuestionsResult } from "@/types";
 
 interface DescriptionsFormPute {
   title: string;
@@ -26,9 +26,10 @@ interface FormBuilderContextType {
   setFormCategory: Dispatch<SetStateAction<string>>;
   validationErrors: Record<string, string>;
   setValidationErrors: Dispatch<SetStateAction<Record<string, string>>>;
-  validateQuestions: () => QuestionFormType[];
+  validateQuestions: () => ValidateQuestionsResult;
   tags: Set<string>, 
   setTags: Dispatch<SetStateAction<Set<string>>>,
+  formId: string | undefined,
 }
 
 export const FormBuilderContext = createContext<FormBuilderContextType | undefined>(undefined);

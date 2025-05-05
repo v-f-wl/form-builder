@@ -4,7 +4,6 @@ import {notFound} from 'next/navigation';
 import {routing} from '@/i18n/routing';
 import { ReactNode } from 'react';
 import { ThemeProvider } from '@/providers/theme-provider';
-import { ReduxProvider } from '@/redux/provider';
 import { LocaleProvider } from '../context/locale-context';
 import Header from '../_components/header';
 import {
@@ -40,11 +39,9 @@ export default async function LocaleLayout({children, params}: LocaleLayoutProps
               <ThemeProvider attribute='class' defaultTheme='system'>
                 <BootstrapThemeSync />
                 <LocaleProvider locale={locale}>
-                    <ReduxProvider>
-                      <Header/>
-                      {children}
-                      <Toaster position="bottom-right"/>
-                    </ReduxProvider>
+                  <Header/>
+                  {children}
+                  <Toaster position="bottom-right"/>
                 </LocaleProvider>
               </ThemeProvider>
             </NextIntlClientProvider>

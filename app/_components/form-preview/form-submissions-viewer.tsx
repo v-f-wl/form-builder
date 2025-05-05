@@ -8,6 +8,7 @@ import { ViewModeToggle } from "./form-submissions/view-mode-toggle"
 import { SubmissionList } from "./form-submissions/submission-list"
 import { SubmissionDetails } from "./form-submissions/submission-details"
 import { SubmissionTable } from "./form-submissions/submission-table"
+import { useTranslations } from "next-intl"
 
 type ViewMode = 'split' | 'table'
 
@@ -17,6 +18,7 @@ export default function FormSubmissionsViewer({ formId }: { formId: string }) {
   const [questionTemplates, setQuestionTemplates] = useState<QuestionTemplate[]>()
   const [viewMode, setViewMode] = useState<ViewMode>('split')
   const locale = useLocale()
+  const t = useTranslations()
 
   useEffect(() => {
     const fetchFormAnswers = async () => {
@@ -32,14 +34,14 @@ export default function FormSubmissionsViewer({ formId }: { formId: string }) {
   return (
     <div className="container my-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h4>Ответы</h4>
+        <h4>{t('ui.answers')}</h4>
         <ViewModeToggle viewMode={viewMode} setViewMode={setViewMode} />
       </div>
 
       {viewMode === 'split' ? (
         <div className="row">
           <div className="col-md-4 border-end">
-            <h5 className="mb-3">Заполненные формы</h5>
+            <h5 className="mb-3">{t('ui.submittedForms')}</h5>
             <SubmissionList submissions={submissions} selectedId={selectedId} setSelectedId={setSelectedId} />
           </div>
 
@@ -47,7 +49,7 @@ export default function FormSubmissionsViewer({ formId }: { formId: string }) {
             {selectedSubmission ? (
               <SubmissionDetails submission={selectedSubmission} />
             ) : (
-              <div className="text-muted">Выберите отправку слева</div>
+              <div className="text-muted">{t('ui.selectSubmission')}</div>
             )}
           </div>
         </div>

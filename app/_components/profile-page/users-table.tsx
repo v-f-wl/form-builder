@@ -4,6 +4,7 @@ import axios from "axios"
 import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import Loading from "../loading"
+import { format } from 'date-fns'
 
 type User = {
   id: string,
@@ -56,9 +57,16 @@ const UsersTable = () => {
     setSelected(updated)
   }
 
-  const handleDelete = () => {
-    setUsersList((prev) => prev.filter((form) => !selected.has(form.id)))
-    setSelected(new Set())
+  const handleSwitchUserPermission = async(permission: 'admin' | 'user') => {
+    const selectedIds: number[] = Array.from(selected).map(id => Number(id));
+    try{
+      await axios.patch(`/${locale}/api/users/switch-user-permission`,{
+        userIds: selectedIds,
+        permission: permission
+      })
+    }catch(error){
+
+    }
   }
   if(!isLoaded){
     return (
@@ -85,14 +93,14 @@ const UsersTable = () => {
         </button>
         <button
           className="btn btn-primary btn-sm"
-          onClick={handleDelete}
+          onClick={() => handleSwitchUserPermission('admin')}
           disabled={selected.size === 0}
         >
           admin
         </button>
         <button
           className="btn btn-primary btn-sm"
-          onClick={handleDelete}
+          onClick={() => handleSwitchUserPermission('user')}
           disabled={selected.size === 0}
         >
           not admin
@@ -125,7 +133,7 @@ const UsersTable = () => {
 
               <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.email}</td>
               <td>{user.permission}</td>
-              <td>{user.createdAt}</td>
+              <td>{format(new Date(user.createdAt), 'dd.MM.yyyy')}</td>
             </tr>
           ))}
         </tbody>

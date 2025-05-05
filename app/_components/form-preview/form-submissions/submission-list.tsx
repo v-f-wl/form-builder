@@ -2,6 +2,7 @@
 
 import { FormSubmission } from "@/types"
 import { format } from 'date-fns'
+import { useTranslations } from "next-intl";
 
 export function SubmissionList({
   submissions,
@@ -12,8 +13,14 @@ export function SubmissionList({
   selectedId: string | null;
   setSelectedId: (id: string) => void;
 }) {
-  if (!submissions) return <div>Загрузка...</div>;
+  const t = useTranslations()
+  if (!submissions) return <div>{t('ui.loading')}...</div>;
 
+  if(submissions.length === 0){
+    return(
+      <div className="">{t('ui.noSubmissionsYet')}</div>
+    )
+  }
   return (
     <ul className="list-group">
       {submissions.map((sub) => (

@@ -3,7 +3,7 @@ import FormsList from "../_components/main-page/forms-list";
  
 export default async function Form() {
   return (
-    <div className="">
+    <div className="mb-4">
       <PopulatSection/>
       <FormsList/>
     </div>

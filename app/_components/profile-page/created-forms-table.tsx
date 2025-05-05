@@ -116,7 +116,6 @@ const CreatedFormsTable = () => {
             <th scope="col">{t('formBuilder.title')}</th>
             <th scope="col">{t('formBuilder.description')}</th>
             <th scope="col">{t('formBuilder.category')}</th>
-            <th scope="col">{t('formBuilder.tags')}</th>
             <th scope="col">Created At</th>
           </tr>
         </thead>
@@ -140,7 +139,6 @@ const CreatedFormsTable = () => {
                 {form.description}
               </td>
               <td>{form.category}</td>
-              <td></td>
               <td>{format(new Date(form.createdAt), 'dd.MM.yyyy')}</td>
             </tr>
           ))}

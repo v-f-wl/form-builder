@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { formsTable, usersTable } from "@/db/schema";
+import { formHashtags, formsTable, hashtags, usersTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,32 +17,34 @@ export async function GET(request: NextRequest) {
         form: formsTable,
         userName: usersTable.name,
         userEmail: usersTable.email,
-        user: {
-          name: usersTable.name,
-        },
+        hashtagName: hashtags.name,
       })
       .from(formsTable)
       .leftJoin(usersTable, eq(formsTable.userId, usersTable.clerkId))
-      .where(eq(formsTable.id, Number(formId)))
-      .limit(1);
+      .leftJoin(formHashtags, eq(formsTable.id, formHashtags.formId))
+      .leftJoin(hashtags, eq(formHashtags.hashtagId, hashtags.id))
+      .where(eq(formsTable.id, Number(formId)));
 
-    const item = result[0];
-
-    if (!item) {
+    if (result.length === 0) {
       return NextResponse.json({ error: "Form not found" }, { status: 404 });
     }
 
-    const resolvedUserName =
-      item.userName && item.userName.trim() !== "" ? item.userName : item.userEmail;
+    const formBase = result[0].form;
+    const resolvedUserName = result[0].userName?.trim() || result[0].userEmail;
 
-    const formWithUserName = {
-      ...item.form,
+    const hashtagsArray = result
+      .map(row => row.hashtagName)
+      .filter((tag): tag is string => !!tag);
+
+    const formWithUserNameAndHashtags = {
+      ...formBase,
       userName: resolvedUserName,
+      hashtags: hashtagsArray,
     };
 
-    return NextResponse.json({ form: formWithUserName }, { status: 200 });
+
+    return NextResponse.json({ form: formWithUserNameAndHashtags }, { status: 200 });
   } catch (error) {
-    console.log(error)
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

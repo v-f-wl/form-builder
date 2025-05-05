@@ -3,11 +3,14 @@ import { useLocale } from "@/app/context/locale-context";
 import { usePathname, useRouter } from "next/navigation";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import ILanguage from "../icons/language-icon";
+import Tooltip from '@mui/material/Tooltip';
+import { useTranslations } from "next-intl";
 
 const LanguageSwitch = () => {
   const router = useRouter()
   const pathname = usePathname()
   const locale = useLocale()
+  const t = useTranslations()
 
   const switchLocale = (nextLocale: string) => {
     const segments = pathname.split('/')
@@ -17,15 +20,17 @@ const LanguageSwitch = () => {
   };
   return ( 
     <div className="dropdown">
-      <button
-        className="btn btn-light dropdown-toggle d-flex align-items-center"
-        type="button"
-        id="languageDropdown"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        <ILanguage/>
-      </button>
+      <Tooltip title={t('ui.switchLanguage')}>
+        <button
+          className="btn btn-light dropdown-toggle d-flex align-items-center"
+          type="button"
+          id="languageDropdown"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <ILanguage/>
+        </button>
+      </Tooltip>
 
       <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
         <li>

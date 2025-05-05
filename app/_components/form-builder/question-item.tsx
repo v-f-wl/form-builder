@@ -27,7 +27,7 @@ const QuestionItem = ({
   required,
 }:QuestionItemProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null)
-  const { updateQuestion, deleteQuestion, isSubmitting, validationErrors } = useFormBuilder()
+  const { updateQuestion, deleteQuestion, isSubmitting, validationErrors, isEditMode } = useFormBuilder()
   const t = useTranslations()
 
   const TypeOfAnswerRander = useMemo(() => {
@@ -63,20 +63,22 @@ const QuestionItem = ({
           value={title}
         />
       </div>
-
-      <div className="mb-3">
-        <label className="form-label text-muted">{t('formBuilder.answerType')}</label>
-        <Select 
-          disabled={isSubmitting}
-          selectedValue={TYPE_OF_ANSWER_OPTIONS.find(type => type.value === typeOfAnswer)}
-          options={TYPE_OF_ANSWER_OPTIONS}
-          onChange={(val) => updateQuestion(id, { typeOfAnswer: val as QuestionType })}
-        />
-      </div>
-
-      <div className="mb-2">
-        {TypeOfAnswerRander}
-      </div>
+      {!isEditMode && (
+        <>
+          <div className="mb-3">
+            <label className="form-label text-muted">{t('formBuilder.answerType')}</label>
+            <Select 
+              disabled={isSubmitting}
+              selectedValue={TYPE_OF_ANSWER_OPTIONS.find(type => type.value === typeOfAnswer)}
+              options={TYPE_OF_ANSWER_OPTIONS}
+              onChange={(val) => updateQuestion(id, { typeOfAnswer: val as QuestionType })}
+              />
+          </div>
+          <div className="mb-2">
+            {TypeOfAnswerRander}
+          </div>
+        </>
+      )}
 
       <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center border-top pt-3 gap-3">
         <div className="form-check form-switch">
@@ -94,14 +96,16 @@ const QuestionItem = ({
           </label>
         </div>
 
-        <div>
-          <Button
-            disabled={isSubmitting}
-            onClick={() => deleteQuestion(id)}
-            label={t('ui.delete')}
-            style="red"
-          />
-        </div>
+        {!isEditMode && (
+          <div>
+            <Button
+              disabled={isSubmitting}
+              onClick={() => deleteQuestion(id)}
+              label={t('ui.delete')}
+              style="red"
+              />
+          </div>
+        )}
       </div>
 
       {validationErrors[id] && (

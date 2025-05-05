@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Loading from "../loading";
 import { format } from 'date-fns'
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 type CompletedFormsType = {
   formId: string,
@@ -15,6 +16,7 @@ type CompletedFormsType = {
 }
 const CompletedFormsList = () => {
   const locale = useLocale()
+  const t = useTranslations()
   const [isLoading, setIsLoading] = useState(true)
   const [completedForms, setCompletedForms] = useState<CompletedFormsType[]>([])
 
@@ -42,8 +44,8 @@ const CompletedFormsList = () => {
   }
   if(completedForms.length == 0){
     return(
-      <div className="container">
-        Вы не прошли еще ни одной формы(либо пройденные вами формы были удалены)
+      <div className="container mt-4">
+        {t('ui.noCompletedForms')}
       </div>
     )
   }

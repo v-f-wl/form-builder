@@ -5,7 +5,9 @@ import { useLocale } from "@/app/context/locale-context";
 import { ResponseFormData } from "@/types";
 import Axios  from "axios";
 import { useTranslations } from "next-intl";
+import { format } from 'date-fns'
 import Link from "next/link";
+import { useEffect } from "react";
 import useSWR from "swr";
 
 interface FormPreviewProps{
@@ -20,7 +22,7 @@ const FormPreview = ({formId}: FormPreviewProps) => {
     errorRetryCount: 3,    
     errorRetryInterval: 1000
   });
-  
+  useEffect(() => {console.log(data)},[data])
   if(isLoading) return <Loading/>
   if(error) return <CrashMessage onClick={() => {}}/>
   if(!data) return <div className="">Test doesnt exist</div>
@@ -30,8 +32,14 @@ const FormPreview = ({formId}: FormPreviewProps) => {
         <div className="card-body">
           <h2 className="card-title">{data.title}</h2>
           <p className="card-text text-muted">{data.description}</p>
-          <div className="d-flex justify-content-between">
-            <small className="text-muted">Отправлено: </small>
+          <div className="w-50 d-flex flex-wrap gap-2">
+            {data.hashtags.length > 0 && data.hashtags.map(item => (
+              <div key={item} className="badge text-bg-primary">#{item}</div>
+            ))}
+          </div>
+          <small className="mt-2 d-block">{t(`formCategories.${data.category}`, { defaultValue: 'Unknown category' })}</small>
+          <div className="mt-2 d-flex justify-content-between">
+            <small className="text-muted">Создано: {format(new Date(data.createdAt), 'dd.MM.yyyy')}</small>
             <small className="text-muted">Пользователь: {data.userName}</small>
           </div>
         </div>

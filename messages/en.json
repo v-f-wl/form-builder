@@ -2,6 +2,8 @@
   "ui": {
     "search": "Search",
     "preview": "Preview",
+    "switchLanguage":"Switch language",
+    "switchTheme":"Switch theme",
     "settings": "Settings",
     "statistics": "Statistics",
     "start": "Start",
@@ -9,6 +11,7 @@
     "delete": "Delete",
     "selectAll": "Select all",
     "unselectAll": "Unselect all",
+    "edit": "Edit",
     "create": "Create",
     "goBack": "Go back",
     "сompletedForms": "Completed forms",
@@ -17,7 +20,19 @@
     "theme": "Theme",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "noSubmissionsYet": "The form hasn't been submitted yet",
+    "thankYou": "Thank you for your response. You can return to the homepage or go to your profile.",
+    "answerAccepted": "Answer accepted!",
+    "goHome": "Go to homepage",
+    "goToProfile": "Go to profile",
+    "submitForm": "Submit form",
+    "answers": "Answers",
+    "submittedForms": "Submitted forms",
+    "selectSubmission": "Select a submission on the left",
+    "singleView": "Single view",
+    "summaryTable": "Summary table",
+    "noCompletedForms": "You haven't completed any forms yet (or the forms you completed have been deleted)"
   },
   "header": {
     "searchInputPlaceholder": "Search on app",

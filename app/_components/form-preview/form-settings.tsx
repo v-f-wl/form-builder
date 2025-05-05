@@ -5,6 +5,7 @@ import { Descriptions } from "@/app/_components/form-builder/form-description";
 import { QuestionsList } from "@/app/_components/form-builder/questions-list";
 import Title from "@/app/_components/UI/title";
 import { useTranslations } from "next-intl";
+import EditFormBtn from "../form-builder/edit-form-btn";
 
 interface FormSettingsType{
   formId: string
@@ -27,7 +28,7 @@ const FormSettings = ({formId}: FormSettingsType) => {
           <FormBuilder formId={formId}>
             <Descriptions />
             <QuestionsList />
-            <AddQuestionButton />
+            <EditFormBtn/>
           </FormBuilder>
         </div>
       </div>
